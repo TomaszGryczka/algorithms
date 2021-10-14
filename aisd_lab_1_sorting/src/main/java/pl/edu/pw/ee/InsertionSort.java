@@ -6,6 +6,10 @@ public class InsertionSort implements Sorting {
 
     @Override
     public void sort(double[] nums) {
+        if (nums == null) {
+            throw new IllegalArgumentException("Nums array cannot be null");
+        }
+        
         double tmp = 0;
 
         int i = 1;

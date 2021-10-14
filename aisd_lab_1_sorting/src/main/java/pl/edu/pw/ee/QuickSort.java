@@ -38,7 +38,7 @@ public class QuickSort implements Sorting {
                 right = ends.get(n);
                 pivot = splitData(data, left, right);
 
-                //dodałem instrukcję, aby nie zapetlic sortowania
+                //prevent from falling into infinite loop
                 starts.remove(n);
                 ends.remove(n);
 
@@ -56,13 +56,14 @@ public class QuickSort implements Sorting {
             }
         }
     }
-
+    
+    //This is Hoare's partition scheme
     private int splitData(double[] data, int start, int end) {
         int left = start + 1;
         int right = end;
 
         while (left < right) {
-            while (left < right && data[left] <= data[start]) { //< -> <=
+            while (left < right && data[left] <= data[start]) {
                 left++;
             }
 

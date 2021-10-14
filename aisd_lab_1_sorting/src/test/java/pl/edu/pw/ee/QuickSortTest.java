@@ -2,6 +2,9 @@ package pl.edu.pw.ee;
 
 import static org.junit.Assert.assertArrayEquals;
 
+import java.util.Random;
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,10 +12,24 @@ import pl.edu.pw.ee.services.Sorting;
 
 public class QuickSortTest {
     private Sorting sorting;
+    private Random rand1, rand2; 
 
     @Before
     public void setUp() {
         sorting = new QuickSort();
+
+        int seed = 12;
+        rand1 = new Random(seed);
+        rand2 = new Random(seed);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_ThrowIllegalArgumentException_When_ArrayIsNull() {
+        //given
+        double[] nums = null;
+        
+        //when
+        sorting.sort(nums);
     }
 
     @Test
@@ -67,25 +84,67 @@ public class QuickSortTest {
         assertArrayEquals(expecteds, nums, 0);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void should_ThrowIllegalArgumentException_When_ArrayIsNull() {
-        //given
-        double[] nums = null;
-        
-        //when
-        sorting.sort(nums);
-    }
-
     @Test
-    public void should_SortArray_When_ArrayHasWorstCaseData() {
+    public void should_SortArray_When_ArrayHasBestCaseData() {
         //given
-        double [] nums = {-10, -4, 2, 5, 10, 112};
+        double [] nums = {1, 0, 0, 0, 0, 5};
         
         //when
         sorting.sort(nums);
 
         //then
-        double [] expecteds = {-10, -4, 2, 5, 10, 112};
+        double [] expecteds = {0, 0, 0, 0, 1, 5};
         assertArrayEquals(expecteds, nums, 0);
+    }
+
+
+    @Test
+    public void should_SortArray_When_ArrayHasWorstCaseData() {
+        //given
+        double [] nums = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        
+        //when
+        sorting.sort(nums);
+
+        //then
+        double [] expecteds = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        assertArrayEquals(expecteds, nums, 0);
+    }
+
+    @Test
+    public void should_SortArray_When_ArrayIsUnsorted() {
+        //given
+        double [] nums = {-2, -5, 12, 1, 1, 92, -3, 4, 1};
+        
+        //when
+        sorting.sort(nums);
+
+        //then
+        double [] expecteds = {-5, -3, -2, 1, 1, 1, 4, 12, 92};
+        assertArrayEquals(expecteds, nums, 0);
+    }
+    
+    @Test
+    public void should_SortArray_WhenNumsAreRandomlyGenerated() {
+        //given
+        double[] nums = new double[100000];
+        
+        for(int i = 0; i < 100000; i++) {
+            nums[i] = 10000 * rand1.nextDouble();
+        }
+
+        //when
+        sorting.sort(nums);
+
+
+        //then
+        double[] result = new double[100000];
+        for(int i = 0; i < 100000; i++) {
+            result[i] = 10000 * rand2.nextDouble();
+        }
+        Arrays.sort(result);
+
+        assertArrayEquals(result, nums, 0);
+        
     }
 }
