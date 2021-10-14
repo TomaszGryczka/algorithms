@@ -63,7 +63,7 @@ public class QuickSort implements Sorting {
         int right = end;
 
         while (left < right) {
-            while (left < right && data[left] <= data[start]) {
+            while (left < right && data[left] < data[start]) {
                 left++;
             }
 

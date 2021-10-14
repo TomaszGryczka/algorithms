@@ -87,13 +87,13 @@ public class QuickSortTest {
     @Test
     public void should_SortArray_When_ArrayHasBestCaseData() {
         //given
-        double [] nums = {1, 0, 0, 0, 0, 5};
-        
+        double [] nums = {4, 1, 3, 5, 6, 7, 2};
+
         //when
         sorting.sort(nums);
 
         //then
-        double [] expecteds = {0, 0, 0, 0, 1, 5};
+        double [] expecteds = {1, 2, 3, 4, 5, 6, 7};
         assertArrayEquals(expecteds, nums, 0);
     }
 
@@ -102,7 +102,7 @@ public class QuickSortTest {
     public void should_SortArray_When_ArrayHasWorstCaseData() {
         //given
         double [] nums = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-        
+
         //when
         sorting.sort(nums);
 
