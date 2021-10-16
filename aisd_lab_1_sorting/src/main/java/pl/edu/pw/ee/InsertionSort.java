@@ -9,7 +9,7 @@ public class InsertionSort implements Sorting {
         if (nums == null) {
             throw new IllegalArgumentException("Nums array cannot be null");
         }
-        
+
         double tmp = 0;
 
         int i = 1;

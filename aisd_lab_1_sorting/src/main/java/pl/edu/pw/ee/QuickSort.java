@@ -2,7 +2,6 @@ package pl.edu.pw.ee;
 
 import pl.edu.pw.ee.services.Sorting;
 
-//fixed missing imports
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +37,6 @@ public class QuickSort implements Sorting {
                 right = ends.get(n);
                 pivot = splitData(data, left, right);
 
-                //prevent from falling into infinite loop
                 starts.remove(n);
                 ends.remove(n);
 
@@ -56,8 +54,7 @@ public class QuickSort implements Sorting {
             }
         }
     }
-    
-    //This is Hoare's partition scheme
+
     private int splitData(double[] data, int start, int end) {
         int left = start + 1;
         int right = end;
