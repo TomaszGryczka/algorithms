@@ -29,12 +29,12 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
         }
 
         int firstItemId = 0;
-        int lasItemId = items.size() - 1;
+        int lastItemId = items.size() - 1;
 
         T resultValue = items.get(firstItemId);
 
-        swapItems(firstItemId, lasItemId);
-        items.remove(lasItemId);
+        swapItems(firstItemId, lastItemId);
+        items.remove(lastItemId);
 
         heapDown();
 
@@ -42,9 +42,9 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
     }
 
     private void heapUp() {
-        int n = items.size();
-        int childId = n - 1;
-        int parentId = (childId - 1) / 2;
+        int n = items.size(); // 1
+        int childId = n - 1; // 0
+        int parentId = (childId - 1) / 2; // 0
 
         while (parentId >= 0) {
             if (isChildBiggerThanParent(childId, parentId)) {
@@ -67,18 +67,25 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
             if (isRightChildBiggerThanLeft(childId)) {
                 childId++;
             }
-            swapItems(childId, parentId);
-            parentId = childId;
-            childId = 2 * parentId + 1;
+            if (isChildBiggerThanParent(childId, parentId)) {
+                swapItems(childId, parentId);
+                parentId = childId;
+                childId = 2 * parentId + 1;
+            } else {
+                break;
+            }
         }
     }
 
     private boolean isChildBiggerThanParent(int childId, int parentId) {
-        T childValue = items.get(childId);
-        T parentValue = items.get(parentId);
+        boolean result = false;
 
-        boolean result = childValue.compareTo(parentValue) > 0;
+        if (childId != parentId) {
+            T childValue = items.get(childId);
+            T parentValue = items.get(parentId);
 
+            result = childValue.compareTo(parentValue) > 0;
+        }
         return result;
     }
 
@@ -86,7 +93,6 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
         int n = items.size();
 
         boolean result;
-
         if (leftChildId + 1 < n) {
             int rightChildId = leftChildId + 1;
             T leftChildValue = items.get(leftChildId);
@@ -107,5 +113,4 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
         items.set(childId, parentValue);
         items.set(parentId, childValue);
     }
-
 }
