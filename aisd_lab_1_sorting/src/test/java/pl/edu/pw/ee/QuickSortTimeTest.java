@@ -34,7 +34,7 @@ public class QuickSortTimeTest {
             measureTimeForBestCaseData(i);
         }
 
-        for (int i = 1000; i < 500001; i += 1000) {
+        for (int i = 1000; i < 50001; i += 1000) {
             measureTimeForBestCaseData(i);
         }
 
@@ -42,8 +42,8 @@ public class QuickSortTimeTest {
 
     private void measureTimeForBestCaseData(int i) {
         double[] nums = new double[i];
-        generateBestCase(nums, i);
-        
+        generateBestCaseData(nums, i);
+
         start = System.nanoTime();
         sorting.sort(nums);
         end = System.nanoTime();
@@ -51,30 +51,30 @@ public class QuickSortTimeTest {
         System.out.println(i + ", " + (end - start) / 1000);
     }
 
-    private void generateBestCase(double[] nums, int numOfElems) {
+    private void generateBestCaseData(double[] nums, int numOfElems) {
         fillArray(nums);
 
         generate(nums, 0, numOfElems);
     }
 
-    private void generate(double[] arr, int begin, int end) {
+    private void generate(double[] nums, int begin, int end) {
         int count = end - begin;
         if (count < 3)
             return;
 
         int middle = begin + (count - 1) / 2;
 
-        generate(arr, begin, middle);
+        generate(nums, begin, middle);
 
-        swap(arr, begin, middle);
+        swap(nums, begin, middle);
 
-        generate(arr, ++middle, end);
+        generate(nums, ++middle, end);
     }
 
-    private void swap(double[] arr, int i, int j) {
-        double t = arr[i];
-        arr[i] = arr[j];
-        arr[j] = t;
+    private void swap(double[] nums, int i, int j) {
+        double t = nums[i];
+        nums[i] = nums[j];
+        nums[j] = t;
     }
 
     private void fillArray(double[] nums) {
@@ -99,7 +99,7 @@ public class QuickSortTimeTest {
 
     private void measureTimeForWorstCaseData(int i) {
         double[] nums = new double[i];
-        generateWorstCase(nums, i);
+        generateWorstCaseData(nums, i);
 
         start = System.nanoTime();
         sorting.sort(nums);
@@ -108,7 +108,7 @@ public class QuickSortTimeTest {
         System.out.println(i + ", " + (end - start) / 1000);
     }
 
-    private void generateWorstCase(double[] nums, int numOfElems) {
+    private void generateWorstCaseData(double[] nums, int numOfElems) {
         for (int i = 0; i < numOfElems; i++) {
             nums[i] = i;
         }

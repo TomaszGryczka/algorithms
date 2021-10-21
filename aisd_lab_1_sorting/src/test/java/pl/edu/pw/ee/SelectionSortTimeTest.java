@@ -42,7 +42,7 @@ public class SelectionSortTimeTest {
 
     private void measureTimeForBestCaseData(int i) {
         double[] nums = new double[i];
-        generateBestCase(nums, i);
+        generateBestCaseData(nums, i);
 
         start = System.nanoTime();
         sorting.sort(nums);
@@ -51,7 +51,7 @@ public class SelectionSortTimeTest {
         System.out.println(i + ", " + (end - start) / 1000);
     }
 
-    private void generateBestCase(double[] nums, int numOfElems) {
+    private void generateBestCaseData(double[] nums, int numOfElems) {
         for (int i = 0; i < numOfElems; i++) {
             nums[i] = i;
         }
@@ -74,7 +74,7 @@ public class SelectionSortTimeTest {
 
     private void measureTimeForWorstCaseData(int i) {
         double[] nums = new double[i];
-        generateWorstCase(nums, i);
+        generateWorstCaseData(nums, i);
 
         start = System.nanoTime();
         sorting.sort(nums);
@@ -83,8 +83,8 @@ public class SelectionSortTimeTest {
         System.out.println(i + ", " + (end - start) / 1000);
     }
 
-    private void generateWorstCase(double[] nums, int numOfElems) {
-        for (int i = numOfElems-1; i >= 0; i--) {
+    private void generateWorstCaseData(double[] nums, int numOfElems) {
+        for (int i = numOfElems - 1; i >= 0; i--) {
             nums[i] = numOfElems - i;
         }
     }

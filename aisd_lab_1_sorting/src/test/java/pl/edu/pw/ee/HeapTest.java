@@ -59,5 +59,24 @@ public class HeapTest {
         assertEquals(expected, result, 0);
     }
 
+    @Test
+    public void should_ReturnCorrectElem_When_HeapHasThreeElems() {
+        // given
+        double firstElem = -1.2;
+        double secondElem = 4.0;
+        double thirdElem = 14.0;
+
+        // when
+        heap.put(firstElem);
+        heap.put(secondElem);
+        heap.put(thirdElem);
+
+        double result = heap.pop();
+
+        // then
+        double expected = 14.0;
+        assertEquals(expected, result, 0);
+    }
+
     
 }

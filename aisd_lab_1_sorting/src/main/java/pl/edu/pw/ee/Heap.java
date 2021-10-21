@@ -113,9 +113,4 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
         items.set(childId, parentValue);
         items.set(parentId, childValue);
     }
-
-    // metoda potrzebna tylko do testowania wydajności algorytmu sortowania
-    public List<T> getItems() {
-        return items;
-    }
 }
