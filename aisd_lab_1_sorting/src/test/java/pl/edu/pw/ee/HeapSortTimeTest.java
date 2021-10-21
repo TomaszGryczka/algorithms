@@ -1,5 +1,6 @@
 package pl.edu.pw.ee;
 
+import java.util.List;
 import java.util.Random;
 
 import org.junit.Before;
@@ -7,7 +8,7 @@ import org.junit.Test;
 
 import pl.edu.pw.ee.services.Sorting;
 
-public class QuickSortTimeTest {
+public class HeapSortTimeTest {
     private long start;
     private long end;
 
@@ -18,7 +19,7 @@ public class QuickSortTimeTest {
 
     @Before
     public void setUp() {
-        sorting = new QuickSort();
+        sorting = new HeapSort();
 
         rand = new Random(seed);
     }
@@ -34,7 +35,7 @@ public class QuickSortTimeTest {
             measureTimeForBestCaseData(i);
         }
 
-        for (int i = 1000; i < 500001; i += 1000) {
+        for (int i = 1000; i < 50001; i += 1000) {
             measureTimeForBestCaseData(i);
         }
 
@@ -42,8 +43,8 @@ public class QuickSortTimeTest {
 
     private void measureTimeForBestCaseData(int i) {
         double[] nums = new double[i];
-        generateBestCase(nums, i);
-        
+        generateBestCaseData(nums, i);
+
         start = System.nanoTime();
         sorting.sort(nums);
         end = System.nanoTime();
@@ -51,38 +52,21 @@ public class QuickSortTimeTest {
         System.out.println(i + ", " + (end - start) / 1000);
     }
 
-    private void generateBestCase(double[] nums, int numOfElems) {
-        fillArray(nums);
+    private void generateBestCaseData(double[] nums, int numOfElems) {
+        Heap<Integer> heap = new Heap<>();
 
-        generate(nums, 0, numOfElems);
+        for (int i = 0; i < numOfElems; i++) {
+            heap.put(i);
+        }
+
+        List<Integer> items = heap.getItems();
+
+        for (int i = 0; i < numOfElems; i++) {
+            nums[i] = items.get(i);
+        }
     }
 
-    private void generate(double[] arr, int begin, int end) {
-        int count = end - begin;
-        if (count < 3)
-            return;
-
-        int middle = begin + (count - 1) / 2;
-
-        generate(arr, begin, middle);
-
-        swap(arr, begin, middle);
-
-        generate(arr, ++middle, end);
-    }
-
-    private void swap(double[] arr, int i, int j) {
-        double t = arr[i];
-        arr[i] = arr[j];
-        arr[j] = t;
-    }
-
-    private void fillArray(double[] nums) {
-        for (int i = 0; i < nums.length; i++)
-            nums[i] = i + 1;
-    }
-
-    @Test
+    /*@Test
     public void measureExecutionTime_When_ArrayHasWorstCaseData() {
         for (int i = 10; i < 101; i += 10) {
             measureTimeForWorstCaseData(i);
@@ -109,10 +93,25 @@ public class QuickSortTimeTest {
     }
 
     private void generateWorstCase(double[] nums, int numOfElems) {
-        for (int i = 0; i < numOfElems; i++) {
-            nums[i] = i;
+        double[] arr = new double[numOfElems + 1];
+        int length = 1;
+        int j;
+        arr[1] = 1;
+
+        for (int i = 2; i <= numOfElems; i++) {
+            j = length;
+            while (j > 1) {
+                arr[j] = arr[j / 2];
+                j /= 2;
+            }
+            arr[1] = i;
+            arr[++length] = 1;
         }
-    }
+
+        for(int i = 1; i < numOfElems; i++) {
+            nums[i] = arr[i + 1];
+        }
+    }*/
 
     @Test
     public void measureExecutionTime_When_ArrayHasRandomData() {

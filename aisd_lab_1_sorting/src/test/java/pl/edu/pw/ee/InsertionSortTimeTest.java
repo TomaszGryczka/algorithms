@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import pl.edu.pw.ee.services.Sorting;
 
-public class QuickSortTimeTest {
+public class InsertionSortTimeTest {
     private long start;
     private long end;
 
@@ -18,7 +18,7 @@ public class QuickSortTimeTest {
 
     @Before
     public void setUp() {
-        sorting = new QuickSort();
+        sorting = new InsertionSort();
 
         rand = new Random(seed);
     }
@@ -34,7 +34,7 @@ public class QuickSortTimeTest {
             measureTimeForBestCaseData(i);
         }
 
-        for (int i = 1000; i < 500001; i += 1000) {
+        for (int i = 1000; i < 50001; i += 1000) {
             measureTimeForBestCaseData(i);
         }
 
@@ -43,7 +43,7 @@ public class QuickSortTimeTest {
     private void measureTimeForBestCaseData(int i) {
         double[] nums = new double[i];
         generateBestCase(nums, i);
-        
+
         start = System.nanoTime();
         sorting.sort(nums);
         end = System.nanoTime();
@@ -52,34 +52,9 @@ public class QuickSortTimeTest {
     }
 
     private void generateBestCase(double[] nums, int numOfElems) {
-        fillArray(nums);
-
-        generate(nums, 0, numOfElems);
-    }
-
-    private void generate(double[] arr, int begin, int end) {
-        int count = end - begin;
-        if (count < 3)
-            return;
-
-        int middle = begin + (count - 1) / 2;
-
-        generate(arr, begin, middle);
-
-        swap(arr, begin, middle);
-
-        generate(arr, ++middle, end);
-    }
-
-    private void swap(double[] arr, int i, int j) {
-        double t = arr[i];
-        arr[i] = arr[j];
-        arr[j] = t;
-    }
-
-    private void fillArray(double[] nums) {
-        for (int i = 0; i < nums.length; i++)
-            nums[i] = i + 1;
+        for (int i = 0; i < numOfElems; i++) {
+            nums[i] = i;
+        }
     }
 
     @Test
@@ -109,8 +84,8 @@ public class QuickSortTimeTest {
     }
 
     private void generateWorstCase(double[] nums, int numOfElems) {
-        for (int i = 0; i < numOfElems; i++) {
-            nums[i] = i;
+        for (int i = numOfElems-1; i >= 0; i--) {
+            nums[i] = numOfElems - i;
         }
     }
 

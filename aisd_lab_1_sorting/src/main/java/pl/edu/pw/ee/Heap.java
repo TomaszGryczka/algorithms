@@ -42,9 +42,9 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
     }
 
     private void heapUp() {
-        int n = items.size(); // 1
-        int childId = n - 1; // 0
-        int parentId = (childId - 1) / 2; // 0
+        int n = items.size();
+        int childId = n - 1;
+        int parentId = (childId - 1) / 2;
 
         while (parentId >= 0) {
             if (isChildBiggerThanParent(childId, parentId)) {
@@ -112,5 +112,10 @@ public class Heap<T extends Comparable<T>> implements HeapInterface<T> {
 
         items.set(childId, parentValue);
         items.set(parentId, childValue);
+    }
+
+    // metoda potrzebna tylko do testowania wydajności algorytmu sortowania
+    public List<T> getItems() {
+        return items;
     }
 }
