@@ -3,10 +3,12 @@ package pl.edu.pw.ee;
 import java.util.Random;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import pl.edu.pw.ee.services.Sorting;
 
+@Ignore("Skipped because these tests take too much time to print output")
 public class InsertionSortTimeTest {
     private long start;
     private long end;

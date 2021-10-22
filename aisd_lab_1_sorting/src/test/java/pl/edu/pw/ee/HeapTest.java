@@ -2,15 +2,22 @@ package pl.edu.pw.ee;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Random;
+
 import org.junit.Before;
 import org.junit.Test;
 
 public class HeapTest {
     private Heap<Double> heap;
+    private Random rand;
+
+    private final int seed = 12;
 
     @Before
     public void setUp() {
         heap = new Heap<>();
+
+        rand = new Random(seed);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -76,6 +83,31 @@ public class HeapTest {
         // then
         double expected = 14.0;
         assertEquals(expected, result, 0);
+    }
+
+    @Test
+    public void should_ReturnMaxElem_WhenHeapHasRandomData() {
+        //given
+        double[] nums = new double[100];
+
+        nums[0] = rand.nextDouble();
+        double correctElem = nums[0];
+
+        for(int i = 1; i < 100; i++) {
+            nums[i] = rand.nextDouble();
+            if(nums[i] > correctElem) {
+                correctElem = nums[i];
+            }
+        }
+
+        //when
+        for(int i = 0; i < 100; i++) {
+            heap.put(nums[i]);
+        }
+        double result = heap.pop();
+
+        //then
+        assertEquals(correctElem, result, 0);
     }
 
     
