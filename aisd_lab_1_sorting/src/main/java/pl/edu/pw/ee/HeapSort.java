@@ -1,5 +1,6 @@
 package pl.edu.pw.ee;
 
+import pl.edu.pw.ee.services.HeapInterface;
 import pl.edu.pw.ee.services.Sorting;
 
 public class HeapSort implements Sorting {
@@ -9,7 +10,7 @@ public class HeapSort implements Sorting {
             throw new IllegalArgumentException("Nums array cannot be null");
         }
 
-        Heap<Double> heap = new Heap<>();
+        HeapInterface<Double> heap = new Heap<>();
 
         int n = nums.length;
 
