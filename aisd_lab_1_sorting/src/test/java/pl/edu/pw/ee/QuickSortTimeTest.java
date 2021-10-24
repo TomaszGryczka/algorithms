@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import pl.edu.pw.ee.services.Sorting;
 
-@Ignore("Skipped because these tests take too much time to print output")
+@Ignore("Skipped because these tests take too much time to print output. Delete this annotation to run tests.")
 public class QuickSortTimeTest {
     private long start;
     private long end;

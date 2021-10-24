@@ -87,28 +87,27 @@ public class HeapTest {
 
     @Test
     public void should_ReturnMaxElem_WhenHeapHasRandomData() {
-        //given
+        // given
         double[] nums = new double[100];
 
         nums[0] = rand.nextDouble();
         double correctElem = nums[0];
 
-        for(int i = 1; i < 100; i++) {
+        for (int i = 1; i < 100; i++) {
             nums[i] = rand.nextDouble();
-            if(nums[i] > correctElem) {
+            if (nums[i] > correctElem) {
                 correctElem = nums[i];
             }
         }
 
-        //when
-        for(int i = 0; i < 100; i++) {
+        // when
+        for (int i = 0; i < 100; i++) {
             heap.put(nums[i]);
         }
         double result = heap.pop();
 
-        //then
+        // then
         assertEquals(correctElem, result, 0);
     }
 
-    
 }

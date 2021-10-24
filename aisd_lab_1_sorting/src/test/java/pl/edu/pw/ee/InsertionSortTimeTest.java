@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import pl.edu.pw.ee.services.Sorting;
 
-@Ignore("Skipped because these tests take too much time to print output")
+@Ignore("Skipped because these tests take too much time to print output. Delete this annotation to run tests.")
 public class InsertionSortTimeTest {
     private long start;
     private long end;
@@ -36,7 +36,7 @@ public class InsertionSortTimeTest {
             measureTimeForBestCaseData(i);
         }
 
-        for (int i = 1000; i < 50001; i += 1000) {
+        for (int i = 1000; i < 500001; i += 1000) {
             measureTimeForBestCaseData(i);
         }
 

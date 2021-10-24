@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import pl.edu.pw.ee.services.Sorting;
 
-@Ignore("Skipped because these tests take too much time to print output")
+@Ignore("Skipped because these tests take too much time to print output. Delete this annotation to run tests.")
 public class HeapSortTimeTest {
     private long start;
     private long end;
@@ -16,7 +16,7 @@ public class HeapSortTimeTest {
     private Sorting sorting;
     private Random rand;
 
-    private final int seed = 10;
+    private final int seed = 0;
 
     @Before
     public void setUp() {
@@ -54,8 +54,40 @@ public class HeapSortTimeTest {
     }
 
     private void generateBestCaseData(double[] nums, int numOfElems) {
-        for(int i = 0; i < numOfElems; i++) {
+        for (int i = 0; i < numOfElems; i++) {
             nums[i] = 1;
+        }
+    }
+
+    @Test
+    public void measureExecutionTime_When_ArrayHasWorstCaseData() {
+        for (int i = 10; i < 101; i += 10) {
+            measureTimeForWorstCaseData(i);
+        }
+
+        for (int i = 100; i < 501; i += 100) {
+            measureTimeForWorstCaseData(i);
+        }
+
+        for (int i = 1000; i < 50001; i += 1000) {
+            measureTimeForWorstCaseData(i);
+        }
+    }
+
+    private void measureTimeForWorstCaseData(int i) {
+        double[] nums = new double[i];
+        generateWorstCaseData(nums, i);
+
+        start = System.nanoTime();
+        sorting.sort(nums);
+        end = System.nanoTime();
+
+        System.out.println(i + ", " + (end - start) / 1000);
+    }
+
+    private void generateWorstCaseData(double[] nums, int numOfElems) {
+        for (int i = 0; i < numOfElems; i++) {
+            nums[i] = rand.nextDouble();
         }
     }
 
@@ -86,7 +118,6 @@ public class HeapSortTimeTest {
     }
 
     private void generateRandomData(double[] nums, int numOfElems) {
-
         for (int i = 0; i < numOfElems; i++) {
             nums[i] = rand.nextDouble();
         }

@@ -2,8 +2,8 @@ package pl.edu.pw.ee;
 
 import static org.junit.Assert.assertArrayEquals;
 
-import java.util.Random;
 import java.util.Arrays;
+import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import pl.edu.pw.ee.services.Sorting;
 public class HeapSortTest {
     private Sorting sorting;
     private Random rand1, rand2;
-    
+
     @Before
     public void setUp() {
         sorting = new HeapSort();
