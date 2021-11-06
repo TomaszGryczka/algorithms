@@ -5,10 +5,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import pl.edu.pw.ee.services.HashTable;
-
 public class HashListChainingTest {
-    HashTable<Double> hashtable = null;
+    private HashListChaining<Double> hashtable;
 
     @Before
     public void setUp() {
@@ -17,55 +15,90 @@ public class HashListChainingTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void should_ThrowIllegalArgumentException_When_ItemIsNull() {
-        //given
+        // given
         Double item = null;
-        
-        //when
+
+        // when
         hashtable.add(item);
     }
 
     @Test
     public void shouldReturnNull_When_HashTableDoesNotContainItem() {
-        //given
+        // given
         Double item = 9.0;
 
-        //when
+        // when
         Double result = hashtable.get(item);
 
-        //then
+        // then
         Double expected = null;
         assertEquals(expected, result);
-        
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_ThrowIllegalArgumentException_When_TryingToGetNullItem() {
+        // when
+        hashtable.get(null);
     }
 
     @Test
     public void should_ReturnItem_When_HashTableHasOneItem() {
-        //given
-        Double item = 10.0;
+        // given
+        Double item = 102.0;
         hashtable.add(item);
 
-        //when
+        // when
         double result = hashtable.get(item);
 
-        //then
-        double expected = 10;
+        // then
+        double expected = 102;
         assertEquals(expected, result, 0);
     }
 
     @Test
     public void should_ReturnCorrectItem_When_HashTableHasTwoItems() {
-        //given
+        // given
         Double firstItem = 10.0;
         Double secondItem = -14.9;
 
         hashtable.add(firstItem);
         hashtable.add(secondItem);
 
-        //when
+        // when
         double result = hashtable.get(secondItem);
 
-        //then
+        // then
         double expected = secondItem;
         assertEquals(expected, result, 0);
+    }
+
+    @Test
+    public void should_NotAddItem_WhenItemExistsInHashTable() {
+        // given
+        Double firstItem = 1.0;
+        Double item = 9.0;
+        Double lastItem = 10.2;
+
+        hashtable.add(firstItem);
+        hashtable.add(item);
+        hashtable.add(lastItem);
+        hashtable.add(item);
+
+        // when
+        int result = hashtable.getnElem();
+
+        // then
+        int expected = 3;
+        assertEquals(expected, result);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_ThrowIllegalArgumentException_When_HashCodeIsIntegerMIN_VALUE() {
+        // given
+        int hashCode = Integer.MIN_VALUE;
+
+        // when
+        hashtable.getHashIdOfHashCode(hashCode);
     }
 }

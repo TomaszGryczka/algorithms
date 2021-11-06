@@ -8,7 +8,7 @@ import pl.edu.pw.ee.services.HashTable;
 public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
 
     private final Elem nil = null;
-    private List<Elem> hashElems = new ArrayList<>();
+    private List<Elem> hashElems;
     private int nElem;
 
     private class Elem {
@@ -22,13 +22,15 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
     }
 
     public HashListChaining(int size) {
+        hashElems = new ArrayList<>(size);
+
         initializeHash(size);
     }
 
     @Override
     public void add(T value) {
-        if(value == null) {
-            throw new IllegalArgumentException("Item can not be null");
+        if (value == null) {
+            throw new IllegalArgumentException("Value can not be null");
         }
 
         int hashCode = value.hashCode();
@@ -48,6 +50,10 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
 
     @Override
     public T get(T value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Value can not be null");
+        }
+
         int hashCode = value.hashCode();
         int hashId = countHashId(hashCode);
 
@@ -67,18 +73,22 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
     }
 
     private void initializeHash(int size) {
-        for(int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             hashElems.add(nil);
         }
     }
 
     private int countHashId(int hashCode) {
+        if (hashCode == Integer.MIN_VALUE) {
+            throw new IllegalArgumentException("HashCode can not be Integer.MIN_VALUE");
+        }
+
         int n = hashElems.size();
         return Math.abs(hashCode % n);
     }
 
     @Override
-    public void delete(T value) { //j* has done smth similiar - check it
+    public void delete(T value) { // j* has done smth similiar - check it
         int hashCode = value.hashCode();
         int hashId = countHashId(hashCode);
 
@@ -87,9 +97,19 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
         while (elem.next != nil && !(elem.next.value.compareTo(value) == 0)) {
             elem = elem.next;
         }
-        if(elem.next != null) {
+        if (elem.next != null) {
             elem.next = elem.next.next;
         }
+    }
+
+    // for tests only
+
+    public int getnElem() {
+        return nElem;
+    }
+
+    public int getHashIdOfHashCode(int value) {
+        return countHashId(value);
     }
 
 }
