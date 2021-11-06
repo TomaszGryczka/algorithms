@@ -1,75 +1,81 @@
 package pl.edu.pw.ee;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import pl.edu.pw.ee.services.HashTable;
 
-public class HashListChaining implements HashTable {
+public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
 
     private final Elem nil = null;
-    private Elem[] hashElems;
+    private List<Elem> hashElems = new ArrayList<>();
     private int nElem;
 
     private class Elem {
-        private Object value;
+        private T value;
         private Elem next;
 
-        Elem(Object value, Elem nextElem) {
+        Elem(T value, Elem nextElem) {
             this.value = value;
             this.next = nextElem;
         }
     }
 
     public HashListChaining(int size) {
-        hashElems = new Elem[size];
-        initializeHash();
+        initializeHash(size);
     }
 
     @Override
-    public void add(Object value) {
+    public void add(T value) {
         int hashCode = value.hashCode();
         int hashId = countHashId(hashCode);
 
-        Elem oldElem = hashElems[hashId];
-        while (oldElem != nil && !oldElem.equals(value)) {
+        Elem oldElem = hashElems.get(hashId);
+        while (oldElem != nil && !(oldElem.value.compareTo(value) == 0)) {
             oldElem = oldElem.next;
         }
         if (oldElem != nil) {
             oldElem.value = value;
         } else {
-            hashElems[hashId] = new Elem(value, hashElems[hashId]);
+            hashElems.set(hashId, new Elem(value, hashElems.get(hashId)));
             nElem++;
         }
     }
 
     @Override
-    public Object get(Object value) {
+    public T get(T value) {
         int hashCode = value.hashCode();
         int hashId = countHashId(hashCode);
 
-        Elem elem = hashElems[hashId];
+        Elem elem = hashElems.get(hashId);
 
-        while (elem != nil && !elem.value.equals(value)) {
+        while (elem != nil && !(elem.value.compareTo(value) == 0)) {
             elem = elem.next;
         }
 
-        return elem != nil ? elem.value : nil;
+        return elem != nil ? elem.value : null;
     }
 
     public double countLoadFactor() {
-        double size = hashElems.length;
+        double size = hashElems.size();
+
         return nElem / size;
     }
 
-    private void initializeHash() {
-        int n = hashElems.length;
-
-        for (int i = 0; i < n; i++) {
-            hashElems[i] = nil;
+    private void initializeHash(int size) {
+        for(int i = 0; i < size; i++) {
+            hashElems.add(nil);
         }
     }
 
     private int countHashId(int hashCode) {
-        int n = hashElems.length;
-        return Math.abs(hashCode) % n;
+        int n = hashElems.size();
+        return Math.abs(hashCode % n);
+    }
+
+    @Override
+    public void delete(T value) {
+        
     }
 
 }
