@@ -22,6 +22,9 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
     }
 
     public HashListChaining(int size) {
+        if(size <= 0) {
+            throw new IllegalArgumentException("Elems arrray can not have size less or equal to 0");
+        }
         hashElems = new ArrayList<>(size);
 
         initializeHash(size);

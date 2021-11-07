@@ -14,6 +14,15 @@ public class HashListChainingTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void should_ThrowIllegalArgumentException_When_CreatingHashTableWithSizeLessThan0() {
+        // given
+        int size = -10;
+
+        // when
+        hashtable = new HashListChaining<>(size);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void should_ThrowIllegalArgumentException_When_ItemIsNull() {
         // given
         Double item = null;
