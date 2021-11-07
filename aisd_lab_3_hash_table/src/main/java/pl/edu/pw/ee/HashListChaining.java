@@ -102,11 +102,9 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
 
         Elem elem = hashElems.get(hashId);
 
-        if (elem.next == nil) {
-            hashElems.set(hashId, nil);
-            nElem--;
-        } else if(elem.value.compareTo(value) == 0) {
+        if (elem.value.compareTo(value) == 0) {
             hashElems.set(hashId, elem.next);
+            nElem--;
         } else {
             while (elem.next != nil && !(elem.next.value.compareTo(value) == 0)) {
                 elem = elem.next;
@@ -121,16 +119,11 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
 
     // for tests only
 
-    public int getnElem() {
+    public int getNElem() {
         return nElem;
     }
 
     public int getHashIdOfHashCode(int value) {
         return countHashId(value);
     }
-
-    public List<Elem> getHashElems() {
-        return hashElems;
-    }
-
 }

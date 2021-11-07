@@ -38,9 +38,9 @@ public class HashListChainingTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void should_ThrowIllegalArgumentException_When_TryingToGetNullItem() {
-        //given
+        // given
         Double item = null;
-        
+
         // when
         hashtable.get(item);
     }
@@ -89,7 +89,7 @@ public class HashListChainingTest {
         hashtable.add(item);
 
         // when
-        int result = hashtable.getnElem();
+        int result = hashtable.getNElem();
 
         // then
         int expected = 3;
@@ -107,55 +107,55 @@ public class HashListChainingTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void should_ThrowIllegalArgumentException_When_TryingToDeleteNullItem() {
-        //given
+        // given
         Double item = null;
 
-        //when
+        // when
         hashtable.delete(item);
     }
 
     @Test(expected = IllegalStateException.class)
     public void should_ThrowIllegalStateException_When_TryingToDeleteFromEmptyHashTable() {
-        //given
+        // given
         double item = 3;
-        
-        //when
+
+        // when
         hashtable.delete(item);
     }
 
     @Test
     public void should_DeleteValue_When_HashtableHasOneValue() {
-        //given
+        // given
         double item = 4.0;
         hashtable.add(item);
 
-        //when
+        // when
         hashtable.delete(item);
 
         Double result = hashtable.get(item);
-        
-        //then
+
+        // then
         Double expected = null;
         assertEquals(expected, result);
     }
 
     @Test
     public void should_DeleteValue_When_ValueIsLastElementInLinkedList() {
-        //given
-        int size = 1; 
+        // given
+        int size = 1;
         hashtable = new HashListChaining<>(size);
-        
+
         double firstItem = 3.0;
-        double lastItem = -1.2; 
+        double lastItem = -1.2;
         hashtable.add(lastItem);
         hashtable.add(firstItem);
 
-        //when
+        // when
         hashtable.delete(lastItem);
 
         Double result = hashtable.get(lastItem);
 
-        //then
+        // then
         Double expected = null;
         assertEquals(expected, result);
 
@@ -163,22 +163,81 @@ public class HashListChainingTest {
 
     @Test
     public void should_DeleteValue_When_ValueIsFirstElementInLinkedList() {
-        //given
-        int size = 1; 
+        // given
+        int size = 1;
         hashtable = new HashListChaining<>(size);
-        
+
         double firstItem = 3.0;
-        double lastItem = -1.2; 
+        double lastItem = -1.2;
         hashtable.add(lastItem);
         hashtable.add(firstItem);
 
-        //when
+        // when
         hashtable.delete(firstItem);
 
         Double result = hashtable.get(firstItem);
 
-        //then
+        // then
         Double expected = null;
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void should_DeleteValue_When_ValueIsMiddleElementInLinkedList() {
+        // given
+        int size = 1;
+        hashtable = new HashListChaining<>(size);
+
+        double itemToDelete = 2;
+
+        double[] items = { 0, 1, 2, 3, 4 };
+        for (int i = 0; i < items.length; i++) {
+            hashtable.add(items[i]);
+        }
+
+        // when
+        hashtable.delete(itemToDelete);
+
+        Double result = hashtable.get(itemToDelete);
+
+        int numOfItems = hashtable.getNElem();
+
+        // then
+        Double expected = null;
+        assertEquals(expected, result);
+
+        int expectedNumOfItems = 4;
+        assertEquals(expectedNumOfItems, numOfItems);
+    }
+
+    @Test
+    public void should_IncrementNElem_When_ItemWasAddedToHashTable() {
+        // given
+        double item = 3.4;
+
+        // when
+        hashtable.add(item);
+        int result = hashtable.getNElem();
+
+        // then
+        int expected = 1;
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void should_DecrementNElem_When_ValueWasDeletedFromHashTable() {
+        // given
+        double firstItem = 3.4;
+        double secondItem = 1.2;
+        hashtable.add(firstItem);
+        hashtable.add(secondItem);
+
+        // when
+        hashtable.delete(firstItem);
+        int result = hashtable.getNElem();
+
+        // then
+        int expected = 1;
         assertEquals(expected, result);
     }
 }
