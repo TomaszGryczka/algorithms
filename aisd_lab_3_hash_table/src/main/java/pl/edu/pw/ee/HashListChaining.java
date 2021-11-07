@@ -88,18 +88,35 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
     }
 
     @Override
-    public void delete(T value) { // j* has done smth similiar - check it
+    public void delete(T value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Value can not be null");
+        }
+
+        if (nElem == 0) {
+            throw new IllegalStateException("Can not delete value from empty hash table");
+        }
+
         int hashCode = value.hashCode();
         int hashId = countHashId(hashCode);
 
         Elem elem = hashElems.get(hashId);
 
-        while (elem.next != nil && !(elem.next.value.compareTo(value) == 0)) {
-            elem = elem.next;
+        if (elem.next == nil) {
+            hashElems.set(hashId, nil);
+            nElem--;
+        } else if(elem.value.compareTo(value) == 0) {
+            hashElems.set(hashId, elem.next);
+        } else {
+            while (elem.next != nil && !(elem.next.value.compareTo(value) == 0)) {
+                elem = elem.next;
+            }
+            if (elem.next != nil) {
+                elem.next = elem.next.next;
+                nElem--;
+            }
         }
-        if (elem.next != null) {
-            elem.next = elem.next.next;
-        }
+
     }
 
     // for tests only
@@ -110,6 +127,10 @@ public class HashListChaining<T extends Comparable<T>> implements HashTable<T> {
 
     public int getHashIdOfHashCode(int value) {
         return countHashId(value);
+    }
+
+    public List<Elem> getHashElems() {
+        return hashElems;
     }
 
 }

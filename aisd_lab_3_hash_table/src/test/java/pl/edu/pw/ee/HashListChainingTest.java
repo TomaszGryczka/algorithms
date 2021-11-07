@@ -38,8 +38,11 @@ public class HashListChainingTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void should_ThrowIllegalArgumentException_When_TryingToGetNullItem() {
+        //given
+        Double item = null;
+        
         // when
-        hashtable.get(null);
+        hashtable.get(item);
     }
 
     @Test
@@ -52,7 +55,7 @@ public class HashListChainingTest {
         double result = hashtable.get(item);
 
         // then
-        double expected = 102;
+        double expected = item;
         assertEquals(expected, result, 0);
     }
 
@@ -100,5 +103,82 @@ public class HashListChainingTest {
 
         // when
         hashtable.getHashIdOfHashCode(hashCode);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_ThrowIllegalArgumentException_When_TryingToDeleteNullItem() {
+        //given
+        Double item = null;
+
+        //when
+        hashtable.delete(item);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void should_ThrowIllegalStateException_When_TryingToDeleteFromEmptyHashTable() {
+        //given
+        double item = 3;
+        
+        //when
+        hashtable.delete(item);
+    }
+
+    @Test
+    public void should_DeleteValue_When_HashtableHasOneValue() {
+        //given
+        double item = 4.0;
+        hashtable.add(item);
+
+        //when
+        hashtable.delete(item);
+
+        Double result = hashtable.get(item);
+        
+        //then
+        Double expected = null;
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void should_DeleteValue_When_ValueIsLastElementInLinkedList() {
+        //given
+        int size = 1; 
+        hashtable = new HashListChaining<>(size);
+        
+        double firstItem = 3.0;
+        double lastItem = -1.2; 
+        hashtable.add(lastItem);
+        hashtable.add(firstItem);
+
+        //when
+        hashtable.delete(lastItem);
+
+        Double result = hashtable.get(lastItem);
+
+        //then
+        Double expected = null;
+        assertEquals(expected, result);
+
+    }
+
+    @Test
+    public void should_DeleteValue_When_ValueIsFirstElementInLinkedList() {
+        //given
+        int size = 1; 
+        hashtable = new HashListChaining<>(size);
+        
+        double firstItem = 3.0;
+        double lastItem = -1.2; 
+        hashtable.add(lastItem);
+        hashtable.add(firstItem);
+
+        //when
+        hashtable.delete(firstItem);
+
+        Double result = hashtable.get(firstItem);
+
+        //then
+        Double expected = null;
+        assertEquals(expected, result);
     }
 }
