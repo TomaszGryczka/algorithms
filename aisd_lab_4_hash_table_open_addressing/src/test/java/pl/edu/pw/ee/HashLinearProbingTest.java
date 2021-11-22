@@ -38,6 +38,40 @@ public class HashLinearProbingTest {
         assertEquals(1, nOfElemsAfterPut);
     }
 
+    @Test
+    public void should_CorrectlyReturnElem_When_HashTableHasOneElem() {
+        //given
+        HashTable<String> hashTable = new HashLinearProbing<>();
+        String elem = "nothing special";
+        hashTable.put(elem);
+
+        //when
+        String result = hashTable.get(elem);
+
+
+        //then
+        String expected = elem;
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void should_CorrectlyReturnElem_When_HashTableHasTwoElems() {
+        //given
+        HashTable<String> hashTable = new HashLinearProbing<>();
+        String elem1 = "nothing special";
+        String elem2 = "something special";
+        hashTable.put(elem1);
+        hashTable.put(elem2);
+
+        //when
+        String result = hashTable.get(elem2);
+
+
+        //then
+        String expected = elem2;
+        assertEquals(expected, result);
+    }
+
     private int getNumOfElems(HashTable<?> hash) {
         String fieldNumOfElems = "nElems";
         try {

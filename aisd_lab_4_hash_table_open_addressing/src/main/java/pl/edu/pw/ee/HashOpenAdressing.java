@@ -11,6 +11,23 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
     private T[] hashElems;
     private final double correctLoadFactor;
 
+    private class Deleted implements Comparable<T> {
+
+        @Override
+        public int compareTo(T elem) {
+            
+            return 0;
+        }
+
+        public boolean equals(T elem) {
+
+            return false;
+        }       
+
+
+
+    }
+
     HashOpenAdressing() {
         this(2039); // initial size as random prime number
     }
@@ -43,8 +60,21 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
 
     @Override
     public T get(T elem) {
-        // TODO Auto-generated method stub
-        return null;
+        int key = elem.hashCode();
+        int i = 0;
+        int hashId = hashFunc(key, i);
+
+        while(hashElems[hashId].compareTo(elem) != 0) {
+            if(hashElems[hashId] == nil) {
+                return null;
+            }
+            i = (i + 1) % size;
+            hashId = hashFunc(key, i);
+        }
+
+        T result = hashElems[hashId];
+
+        return result;
     }
 
     @Override
