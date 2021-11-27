@@ -10,6 +10,8 @@ import org.junit.Test;
 import pl.edu.pw.ee.services.HashTable;
 
 public class HashLinearProbingTest {
+    
+
     @Test(expected = IllegalArgumentException.class)
     public void should_ThrowException_WhenInitialSizeIsLowerThanOne() {
         // given
@@ -40,34 +42,32 @@ public class HashLinearProbingTest {
 
     @Test
     public void should_CorrectlyReturnElem_When_HashTableHasOneElem() {
-        //given
+        // given
         HashTable<String> hashTable = new HashLinearProbing<>();
         String elem = "nothing special";
         hashTable.put(elem);
 
-        //when
+        // when
         String result = hashTable.get(elem);
 
-
-        //then
+        // then
         String expected = elem;
         assertEquals(expected, result);
     }
 
     @Test
     public void should_CorrectlyReturnElem_When_HashTableHasTwoElems() {
-        //given
+        // given
         HashTable<String> hashTable = new HashLinearProbing<>();
         String elem1 = "nothing special";
         String elem2 = "something special";
         hashTable.put(elem1);
         hashTable.put(elem2);
 
-        //when
+        // when
         String result = hashTable.get(elem2);
 
-
-        //then
+        // then
         String expected = elem2;
         assertEquals(expected, result);
     }
@@ -86,5 +86,12 @@ public class HashLinearProbingTest {
         } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    public void testing() {
+        int i = 0;
+        i = (i + 1) % 3;
+        System.out.println(i);
     }
 }
