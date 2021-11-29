@@ -158,13 +158,19 @@ public class RedBlackTree<K extends Comparable<K>, V> {
 
     public String getPreOrder() {
         //klucz1:wartosc1 klucz2:wartosc2 ...
+
+        return null;
     }
 
     public String getInOrder() {
         //klucz1:wartosc1 klucz2:wartosc2 ...
+
+        return null;
     }
 
     public String getPostOrder() {
         //klucz1:wartosc1 klucz2:wartosc2 ...
+
+        return null;
     }
 }
