@@ -11,8 +11,7 @@ import org.junit.Test;
 
 import pl.edu.pw.ee.services.HashTable;
 
-public class HashTableOpenAddressingPerformanceTest {
-
+public class HashLinearProbingPerformanceTest {
     private URL wordListSrc;
     private BufferedReader bufferedReader;
     private InputStreamReader inputStreamReader;
@@ -28,7 +27,7 @@ public class HashTableOpenAddressingPerformanceTest {
     private final int firstNotRejectedVal = 9;
     private final int lastNotRejectedVal = 19;
 
-    private HashTable<String> hashTable;
+    private HashTable<String> hash;
 
     private long start;
     private long end;
@@ -39,8 +38,6 @@ public class HashTableOpenAddressingPerformanceTest {
 
     private double putTimeArmean;
     private double getTimeArmean;
-
-    private int counter = 1;
 
     @Before
     public void setUp() {
@@ -74,65 +71,27 @@ public class HashTableOpenAddressingPerformanceTest {
 
     @Test
     public void performanceTest() {
-        HashTable<String> hashLinearProbing = null;
-        HashTable<String> hashQuadraticProbing = null;
-        HashTable<String> hashDoubleHashing = null;
-
-        System.out.println("Adresowanie liniowe:");
-        printTimeForLinearProbing(hashLinearProbing);
-        counter = 1;
-
-        System.out.println("Adresowanie kwadratowe:");
-        printTimeForQuadraticProbing(hashQuadraticProbing);
-        counter = 1;
-
-        System.out.println("Adresowanie podwójne:");
-        printTimeForDoubleHashing(hashDoubleHashing);
-
+        System.out.println("Adresowanie liniowe: ");
+        printTimeForLinearProbing();
     }
 
-    private void printTimeForLinearProbing(HashTable<String> hash) {
-        printHeader();
-
-        for (int i = 1; i <= initHashSize; i *= 2) {
-            hash = new HashLinearProbing<>(i * initHashSize);
-            System.out.print(fixedLengthString(counter++ + ". ", 4) + fixedLengthString(i * initHashSize + "", 26));
-            measureTime(hash, i * initHashSize);
-        }
-
-    }
-
-    private void printTimeForQuadraticProbing(HashTable<String> hash) {
+    private void printTimeForLinearProbing() {
         System.out.println("Lp  " + "Poczatkowy rozmiar hasza  " + "Sredni czas wstawiania 100000 elementow "
                 + "Sredni czas wyszukiwania 100000 elementow");
 
+        int counter = 1;
+
         for (int i = 1; i <= initHashSize; i *= 2) {
-            hash = new HashQuadraticProbing<>(i * initHashSize, 1, 10);
             System.out.print(fixedLengthString(counter++ + ". ", 4) + fixedLengthString(i * initHashSize + "", 26));
-            measureTime(hash, i * initHashSize);
+            measureTime(i * initHashSize);
         }
 
     }
 
-    private void printTimeForDoubleHashing(HashTable<String> hash) {
-        printHeader();
-
-        for (int i = 1; i <= initHashSize; i *= 2) {
-            hash = new HashDoubleHashing<>(i * initHashSize);
-            System.out.print(fixedLengthString(counter++ + ". ", 4) + fixedLengthString(i * initHashSize + "", 26));
-            measureTime(hash, i * initHashSize);
-        }
-
-    }
-
-    private void measureTime(HashTable<String> hash, int hashSize) {
+    private void measureTime(int hashSize) {
 
         for (int j = 0; j < numOfMeasurements; j++) {
-            try {
-                hash = hash.getClass().newInstance();
-            } catch (Exception e) {
-                System.out.println("doing nothing");
-            }
+            hash = new HashLinearProbing<>(hashSize);
 
             start = System.nanoTime();
             for (int i = 0; i < wordListSize; i++) {
@@ -149,12 +108,6 @@ public class HashTableOpenAddressingPerformanceTest {
             }
             end = System.nanoTime();
 
-            /*
-             * for(int i = 0; i < wordListSize; i++) {
-             * hash.delete(words[i]);
-             * }
-             */
-
             elapsedTime = (end - start) / 1000;
             getTimeResults[j] = elapsedTime;
         }
@@ -162,7 +115,8 @@ public class HashTableOpenAddressingPerformanceTest {
         Arrays.sort(putTimeResults);
         Arrays.sort(getTimeResults);
 
-        long getTimeSum = 0, putTimeSum = 0;
+        long getTimeSum = 0;
+        long putTimeSum = 0;
 
         for (int i = firstNotRejectedVal; i < lastNotRejectedVal; i++) {
             putTimeSum += putTimeResults[i];
@@ -178,10 +132,5 @@ public class HashTableOpenAddressingPerformanceTest {
 
     private String fixedLengthString(String string, int length) {
         return String.format("%1$-" + length + "s", string);
-    }
-
-    private void printHeader() {
-        System.out.println("Lp  " + "Poczatkowy rozmiar hasza  " + "Sredni czas wstawiania 100000 elementow "
-                + "Sredni czas wyszukiwania 100000 elementow");
     }
 }

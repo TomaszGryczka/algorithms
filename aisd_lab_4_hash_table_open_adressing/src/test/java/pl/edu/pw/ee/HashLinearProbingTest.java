@@ -1,7 +1,6 @@
 package pl.edu.pw.ee;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Field;
 
@@ -11,7 +10,6 @@ import pl.edu.pw.ee.services.HashTable;
 
 public class HashLinearProbingTest {
     
-
     @Test(expected = IllegalArgumentException.class)
     public void should_ThrowException_WhenInitialSizeIsLowerThanOne() {
         // given
@@ -25,14 +23,14 @@ public class HashLinearProbingTest {
     }
 
     @Test
-    public void should_CorrectlyAddNewElems_WhenElemDoesNotExistInHashTable() {
+    public void should_CorrectlyAddNewElem_WhenElemDoesNotExistInHashTable() {
         // given
         HashTable<String> emptyHash = new HashLinearProbing<>();
-        String newEleme = "nothing special";
+        String newElem = "nothing special";
 
         // when
         int nOfElemsBeforePut = getNumOfElems(emptyHash);
-        emptyHash.put(newEleme);
+        emptyHash.put(newElem);
         int nOfElemsAfterPut = getNumOfElems(emptyHash);
 
         // then

@@ -1,0 +1,8 @@
+#ignore hidden files
+.*
+
+#ignore build directories
+target/
+
+#do not ignore itself
+!/.gitignore
