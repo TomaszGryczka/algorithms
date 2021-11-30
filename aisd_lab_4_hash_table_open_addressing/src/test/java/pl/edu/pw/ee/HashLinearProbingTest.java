@@ -25,7 +25,7 @@ public class HashLinearProbingTest {
     }
 
     @Test
-    public void should_CorrectlyAddNewElems_WhenNotExistInHashTable() {
+    public void should_CorrectlyAddNewElems_WhenElemDoesNotExistInHashTable() {
         // given
         HashTable<String> emptyHash = new HashLinearProbing<>();
         String newEleme = "nothing special";
@@ -56,7 +56,7 @@ public class HashLinearProbingTest {
     }
 
     @Test
-    public void should_CorrectlyReturnElem_When_HashTableHasTwoElems() {
+    public void should_ReturnCorrectElem_When_HashTableHasTwoElems() {
         // given
         HashTable<String> hashTable = new HashLinearProbing<>();
         String elem1 = "nothing special";

@@ -8,3 +8,4 @@ public interface HashTable<T extends Comparable<T>> {
 
     void delete(T elem);
 }
+

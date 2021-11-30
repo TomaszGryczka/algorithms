@@ -19,5 +19,9 @@ public class HashDoubleHashing<T extends Comparable<T>> extends HashOpenAdressin
         hash = hash < 0 ? -hash : hash;
 
         return hash;
+
+        // f(k, i) = (f(k) + i * g(k)) % m
+        // f(k)= k % m
+        // g(k)= 1 + (k mod (m-3))
     }
 }
