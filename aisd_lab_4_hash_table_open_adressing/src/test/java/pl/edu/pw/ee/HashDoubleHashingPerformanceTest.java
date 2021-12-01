@@ -7,10 +7,12 @@ import java.net.URL;
 import java.util.Arrays;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import pl.edu.pw.ee.services.HashTable;
 
+@Ignore("Skipped because this test take too much time to print output. Delete this annotation to run performance test.")
 public class HashDoubleHashingPerformanceTest {
     private URL wordListSrc;
     private BufferedReader bufferedReader;

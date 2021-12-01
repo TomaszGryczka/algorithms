@@ -52,13 +52,17 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         int i = 0;
         int hashId = hashFunc(key, i);
 
-        while (hashElems[hashId] != nil) {
+        while (hashElems[hashId] != nil && hashElems[hashId].compareTo(newElem) != 0) {
             i = (i + 1) % size;
             hashId = hashFunc(key, i);
         }
 
-        hashElems[hashId] = newElem;
-        nElems++;
+        if(hashElems[hashId] == nil) {
+            hashElems[hashId] = newElem;
+            nElems++;
+        } else {
+            hashElems[hashId] = newElem;
+        }
     }
 
     @Override

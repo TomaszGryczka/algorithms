@@ -13,6 +13,8 @@ public class HashQuadraticProbing<T extends Comparable<T>> extends HashOpenAdres
 
     public HashQuadraticProbing(int size, double a, double b) {
         super(size);
+
+        validateConstants(a, b);
         this.a = a;
         this.b = b;
     }
@@ -26,6 +28,12 @@ public class HashQuadraticProbing<T extends Comparable<T>> extends HashOpenAdres
         hash = hash < 0 ? -hash : hash;
 
         return hash;
+    }
+
+    private void validateConstants(double constA, double contsB) {
+        if(constA == 0 || contsB == 0) {
+            throw new IllegalArgumentException("Constant can not be 0!");
+        }
     }
 
 }
