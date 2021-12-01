@@ -8,6 +8,8 @@ public class HashDoubleHashing<T extends Comparable<T>> extends HashOpenAdressin
 
     public HashDoubleHashing(int size) {
         super(size);
+
+        validateInitSizeOfDoubleHashing(size);
     }
 
     @Override
@@ -33,5 +35,11 @@ public class HashDoubleHashing<T extends Comparable<T>> extends HashOpenAdressin
 
     private int gFunction(int key, int m) {
         return 1 + (key % (m - 3));
+    }
+
+    private void validateInitSizeOfDoubleHashing(int size) {
+        if (size == 3) {
+            throw new IllegalArgumentException("Size can not be 3! - / by 0!");
+        }
     }
 }

@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import pl.edu.pw.ee.services.HashTable;

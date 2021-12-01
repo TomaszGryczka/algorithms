@@ -77,12 +77,12 @@ public class HashQuadraticProbingPerformanceTest {
         printTimeForQuadraticProbing();
     }
 
-    private void printTimeForQuadraticProbing() {                
+    private void printTimeForQuadraticProbing() {
         int counter = 1;
         int a = 0;
         int b = 11;
 
-        for(int j = 1; j < 11; j++) {
+        for (int j = 1; j < 11; j++) {
             printHeader();
             System.out.println("a = " + (a + j) + ", " + "b = " + (b - j));
 
@@ -96,7 +96,6 @@ public class HashQuadraticProbingPerformanceTest {
 
             System.out.println();
         }
-        
 
     }
 

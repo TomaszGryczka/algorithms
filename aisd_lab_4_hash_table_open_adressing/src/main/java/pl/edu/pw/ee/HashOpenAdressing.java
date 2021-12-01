@@ -1,6 +1,5 @@
 package pl.edu.pw.ee;
 
-import pl.edu.pw.ee.exceptions.NotImplementedException;
 import pl.edu.pw.ee.services.HashTable;
 
 public abstract class HashOpenAdressing<T extends Comparable<T>> implements HashTable<T> {
@@ -52,11 +51,17 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         int i = 0;
         int hashId = hashFunc(key, i);
 
+        int loopId = hashId;
+
         while (hashElems[hashId] != nil && hashElems[hashId].compareTo(newElem) != 0
                 && delValue.compareTo(hashElems[hashId]) != 0) {
 
             i = (i + 1) % size;
             hashId = hashFunc(key, i);
+
+            if (hashId == loopId) {
+                doubleResize();
+            }
         }
 
         if (hashElems[hashId] != nil && hashElems[hashId].compareTo(newElem) == 0) {
