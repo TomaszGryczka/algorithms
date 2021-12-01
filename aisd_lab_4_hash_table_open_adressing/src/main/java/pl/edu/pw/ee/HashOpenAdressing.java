@@ -52,22 +52,25 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         int i = 0;
         int hashId = hashFunc(key, i);
 
-        while (hashElems[hashId] != nil && hashElems[hashId].compareTo(newElem) != 0) {
+        while (hashElems[hashId] != nil && hashElems[hashId].compareTo(newElem) != 0
+                && delValue.compareTo(hashElems[hashId]) != 0) {
+
             i = (i + 1) % size;
             hashId = hashFunc(key, i);
         }
 
-        if(hashElems[hashId] == nil) {
+        if (hashElems[hashId] != nil && hashElems[hashId].compareTo(newElem) == 0) {
             hashElems[hashId] = newElem;
-            nElems++;
         } else {
             hashElems[hashId] = newElem;
+            nElems++;
         }
     }
 
     @Override
     public T get(T elem) {
         validateInputElem(elem);
+        validateNumOfElems();
 
         int key = elem.hashCode();
         int i = 0;
@@ -90,6 +93,7 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
     @Override
     public void delete(T elem) {
         validateInputElem(elem);
+        validateNumOfElems();
 
         int key = elem.hashCode();
         int i = 0;
@@ -120,6 +124,12 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         }
     }
 
+    private void validateNumOfElems() {
+        if (nElems == 0) {
+            throw new IllegalStateException("Hash Table is empty!");
+        }
+    }
+
     abstract int hashFunc(int key, int i);
 
     int getSize() {
@@ -140,7 +150,7 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
 
     private void doubleResize() {
         int prevSize = this.size;
-        // System.out.println(size + " - " + nElems);
+
         this.size *= 2;
 
         T[] prevHash = hashElems;
@@ -148,9 +158,6 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
 
         for (int i = 0; i < prevSize; i++) {
             if (prevHash[i] != nil && delValue.compareTo(prevHash[i]) != 0) {
-                // put(prevHash[i]);
-                // nElems--;
-
                 int key = prevHash[i].hashCode();
                 int idx = 0;
                 int hashId = hashFunc(key, idx);
@@ -163,6 +170,5 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
                 hashElems[hashId] = prevHash[i];
             }
         }
-        // System.out.println("Liczba elem po: " + nElems);
     }
 }
