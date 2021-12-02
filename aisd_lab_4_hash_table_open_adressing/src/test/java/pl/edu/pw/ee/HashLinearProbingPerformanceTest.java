@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import pl.edu.pw.ee.services.HashTable;
 
-@Ignore("Skipped because this test take too much time to print output. Delete this annotation to run performance test.")
+@Ignore("Skipped because this test takes too much time to print output. Delete this annotation to run performance test.")
 public class HashLinearProbingPerformanceTest {
     private URL wordListSrc;
     private BufferedReader bufferedReader;
@@ -101,7 +101,7 @@ public class HashLinearProbingPerformanceTest {
             }
             end = System.nanoTime();
 
-            elapsedTime = (end - start) / 1000;
+            elapsedTime = (end - start) / 1000000;
             putTimeResults[j] = elapsedTime;
 
             start = System.nanoTime();
@@ -110,7 +110,7 @@ public class HashLinearProbingPerformanceTest {
             }
             end = System.nanoTime();
 
-            elapsedTime = (end - start) / 1000;
+            elapsedTime = (end - start) / 1000000;
             getTimeResults[j] = elapsedTime;
         }
 

@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import pl.edu.pw.ee.services.HashTable;
 
-@Ignore("Skipped because this test take too much time to print output. Delete this annotation to run performance test.")
+@Ignore("Skipped because this test takes too much time to print output. Delete this annotation to run performance test.")
 public class HashQuadraticProbingPerformanceTest {
     private URL wordListSrc;
     private BufferedReader bufferedReader;
@@ -83,12 +83,13 @@ public class HashQuadraticProbingPerformanceTest {
         int b = 11;
 
         for (int j = 1; j < 11; j++) {
-            printHeader();
+
             System.out.println("a = " + (a + j) + ", " + "b = " + (b - j));
+            printHeader();
 
             for (int i = 1; i <= initHashSize; i *= 2) {
-                System.out.print(fixedLengthString(counter + ". ", 4) + fixedLengthString(i * initHashSize + ",", 26));
-                measureTime(i * initHashSize, a + j, b - j);
+                System.out.print(fixedLengthString(counter + ". ", 4) + fixedLengthString(i * initHashSize + ",", 8));
+                measureTime(i * initHashSize, a * 10 + j, b * 10 - j);
                 counter++;
             }
 
@@ -110,7 +111,7 @@ public class HashQuadraticProbingPerformanceTest {
             }
             end = System.nanoTime();
 
-            elapsedTime = (end - start) / 1000;
+            elapsedTime = (end - start) / 1000000;
             putTimeResults[j] = elapsedTime;
 
             start = System.nanoTime();
@@ -119,7 +120,7 @@ public class HashQuadraticProbingPerformanceTest {
             }
             end = System.nanoTime();
 
-            elapsedTime = (end - start) / 1000;
+            elapsedTime = (end - start) / 1000000;
             getTimeResults[j] = elapsedTime;
         }
 
@@ -137,7 +138,7 @@ public class HashQuadraticProbingPerformanceTest {
         putTimeArmean = putTimeSum / (lastNotRejectedVal - firstNotRejectedVal);
         getTimeArmean = getTimeSum / (lastNotRejectedVal - firstNotRejectedVal);
 
-        System.out.print(fixedLengthString(putTimeArmean + ",", 40) + fixedLengthString(getTimeArmean + ",", 40));
+        System.out.print(fixedLengthString(putTimeArmean + ",", 8) + fixedLengthString(getTimeArmean + ",", 8));
         System.out.println();
     }
 
@@ -146,7 +147,7 @@ public class HashQuadraticProbingPerformanceTest {
     }
 
     private void printHeader() {
-        System.out.println("Lp  " + "Poczatkowy rozmiar hasza  " + "Sredni czas wstawiania 100000 elementow "
-                + "Sredni czas wyszukiwania 100000 elementow");
+        System.out.println("Lp  " + "SIZE     " + "PUT     "
+                + "GET     ");
     }
 }

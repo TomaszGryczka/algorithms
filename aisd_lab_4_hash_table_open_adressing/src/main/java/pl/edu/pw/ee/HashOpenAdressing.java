@@ -51,7 +51,7 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         int i = 0;
         int hashId = hashFunc(key, i);
 
-        int loopId = hashId;
+        int infLoopCheckIter = 0;
 
         while (hashElems[hashId] != nil && hashElems[hashId].compareTo(newElem) != 0
                 && delValue.compareTo(hashElems[hashId]) != 0) {
@@ -59,9 +59,20 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
             i = (i + 1) % size;
             hashId = hashFunc(key, i);
 
-            if (hashId == loopId) {
-                doubleResize();
+            infLoopCheckIter++;
+
+            if (infLoopCheckIter > size) {
+                infLoopCheckIter = -1;
+                break;
             }
+        }
+
+        if (infLoopCheckIter == -1) {
+            doubleResize();
+
+            put(newElem);
+
+            return;
         }
 
         if (hashElems[hashId] != nil && hashElems[hashId].compareTo(newElem) == 0) {
@@ -81,9 +92,24 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         int i = 0;
         int hashId = hashFunc(key, i);
 
+        int infLoopCheckIter = 0;
+
         while (hashElems[hashId] != nil && hashElems[hashId].compareTo(elem) != 0) {
             i = (i + 1) % size;
             hashId = hashFunc(key, i);
+
+            infLoopCheckIter++;
+
+            if (infLoopCheckIter > size) {
+                infLoopCheckIter = -1;
+                break;
+            }
+        }
+
+        if (infLoopCheckIter == -1) {
+            doubleResize();
+
+            return get(elem);
         }
 
         if (hashElems[hashId] == nil) {
@@ -104,12 +130,21 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
         int i = 0;
         int hashId = hashFunc(key, i);
 
+        int infLoopCheckIter = 0;
+
         while (hashElems[hashId] != nil && hashElems[hashId].compareTo(elem) != 0) {
             i = (i + 1) % size;
             hashId = hashFunc(key, i);
+
+            infLoopCheckIter++;
+
+            if (infLoopCheckIter > size) {
+                infLoopCheckIter = -1;
+                break;
+            }
         }
 
-        if (hashElems[hashId] == nil) {
+        if (hashElems[hashId] == nil || infLoopCheckIter == -1) {
             throw new IllegalArgumentException("Elem does not exist in hash table!");
         } else {
             hashElems[hashId] = (T) delValue;
@@ -154,7 +189,7 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
     }
 
     private void doubleResize() {
-        int prevSize = this.size;
+        int prevSize = hashElems.length;
 
         this.size *= 2;
 
@@ -163,13 +198,33 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
 
         for (int i = 0; i < prevSize; i++) {
             if (prevHash[i] != nil && delValue.compareTo(prevHash[i]) != 0) {
+
                 int key = prevHash[i].hashCode();
                 int idx = 0;
                 int hashId = hashFunc(key, idx);
 
-                while (hashElems[hashId] != nil) {
+                int infLoopCheckIter = 0;
+
+                while (hashElems[hashId] != nil && hashElems[hashId].compareTo(prevHash[i]) != 0
+                        && delValue.compareTo(hashElems[hashId]) != 0) {
+
                     idx = (idx + 1) % size;
                     hashId = hashFunc(key, idx);
+
+                    infLoopCheckIter++;
+
+                    if (infLoopCheckIter > size) {
+                        infLoopCheckIter = -1;
+                        break;
+                    }
+                }
+
+                if (infLoopCheckIter == -1) {
+                    hashElems = prevHash;
+                    
+                    doubleResize();
+
+                    return;
                 }
 
                 hashElems[hashId] = prevHash[i];
