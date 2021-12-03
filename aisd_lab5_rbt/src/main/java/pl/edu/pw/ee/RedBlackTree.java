@@ -126,8 +126,14 @@ public class RedBlackTree<K extends Comparable<K>, V> {
     }
 
     private Node<K, V> rotateRight(Node<K, V> node) {
-	// TODO
-        return null;
+        Node<K, V> head = node.getLeft();
+        node.setLeft(head.getRight());
+        head.setRight(node);
+
+        head.setColor(node.getColor());
+        node.setColor(RED);
+
+        return head;
     }
 
     private void changeColorsIfNeeded(Node<K, V> node) {
@@ -152,24 +158,28 @@ public class RedBlackTree<K extends Comparable<K>, V> {
                 : node.isRed();
     }
 
-    public void delete(K key) {
-        //...
+    public void deleteMax(K key) {
+        validateKey(key);
+
+        if(root == null) {
+            throw new IllegalStateException("Red Black Tree is empty!");
+        }
     }
 
     public String getPreOrder() {
-        //klucz1:wartosc1 klucz2:wartosc2 ...
+        // klucz1:wartosc1 klucz2:wartosc2 ...
 
         return null;
     }
 
     public String getInOrder() {
-        //klucz1:wartosc1 klucz2:wartosc2 ...
+        // klucz1:wartosc1 klucz2:wartosc2 ...
 
         return null;
     }
 
     public String getPostOrder() {
-        //klucz1:wartosc1 klucz2:wartosc2 ...
+        // klucz1:wartosc1 klucz2:wartosc2 ...
 
         return null;
     }
