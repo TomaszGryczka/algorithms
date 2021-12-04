@@ -148,7 +148,7 @@ public class RedBlackTreeTest {
     }
 
     @Test
-    public void should_DeleteMaxValue_When_RBTHasOneElem() {
+    public void should_DeleteMaxValue_When_RBTHasOnlyRoot() {
         //given
         String keyVal = "something different";
 
@@ -163,6 +163,40 @@ public class RedBlackTreeTest {
         Node<String, String> expected = null;
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void should_DeleteMaxValue_When_RootHasOnlyOneLessChild() {
+        // given
+        String keyVal1 = "A";
+        String keyVal2 = "B";
+
+        rbt.put(keyVal1, keyVal1);
+        rbt.put(keyVal2, keyVal2);
+
+        // when
+        rbt.deleteMax();
+
+        String actual = getRoot(rbt).getValue();
+
+        // then
+        String expected = "A";
+
+        assertEquals(expected, actual);
+        
+    }
+
+    @Test
+    public void should_() {
+        // given
+
+
+        // when
+
+
+        // then
+        
+        
     }
 
     private Node<String, String> getRoot(RedBlackTree<String, String> rbt) {

@@ -7,11 +7,10 @@ public class RedBlackTree<K extends Comparable<K>, V> {
 
     private Node<K, V> root;
 
-    private String orderResult;
+    private int counter = 1;
 
-    // only for test
-    public Node<K, V> getRoot() {
-        return root;
+    public int getCounter() {
+        return counter;
     }
 
     public V get(K key) {
@@ -37,8 +36,13 @@ public class RedBlackTree<K extends Comparable<K>, V> {
     }
 
     public void put(K key, V value) {
+        counter = 0;
+        
         validateParams(key, value);
+
+        counter++;
         root = put(root, key, value);
+        
         root.setColor(BLACK);
     }
 
@@ -68,9 +72,13 @@ public class RedBlackTree<K extends Comparable<K>, V> {
         }
 
         if (isKeyBiggerThanNode(key, node)) {
+            
+            counter++;
             putOnTheRight(node, key, value);
-
+            
         } else if (isKeySmallerThanNode(key, node)) {
+            
+            counter++;
             putOnTheLeft(node, key, value);
 
         } else {
