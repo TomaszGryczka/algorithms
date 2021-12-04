@@ -7,6 +7,13 @@ public class RedBlackTree<K extends Comparable<K>, V> {
 
     private Node<K, V> root;
 
+    private String orderResult;
+
+    // only for test
+    public Node<K, V> getRoot() {
+        return root;
+    }
+
     public V get(K key) {
         validateKey(key);
         Node<K, V> node = root;
@@ -158,29 +165,105 @@ public class RedBlackTree<K extends Comparable<K>, V> {
                 : node.isRed();
     }
 
-    public void deleteMax(K key) {
-        validateKey(key);
-
+    public void deleteMax() {
         if(root == null) {
             throw new IllegalStateException("Red Black Tree is empty!");
         }
+
+        root = delete(root); 
+    }
+
+    private Node<K, V> delete(Node<K, V> node) {
+        if(node == null) {
+            return null;
+        }
+
+        if(node.getLeft() != null) {
+            if(node.getLeft().isRed()) {
+                node = rotateRight(node);
+            }
+        }
+        
+        if(node.getRight() == null) {
+            return null;
+        }
+
+        if(!node.getRight().isRed() && node.getRight().getLeft() != null && !node.getLeft().isRed()) {
+            changeColors(node);
+
+            if(node.getLeft() != null && node.getLeft().getLeft().isRed()) {
+                node = rotateRight(node);
+                changeColors(node);
+            }
+        }
+
+        if(node.getRight() != null) {
+            node.setRight(delete(node.getRight()));
+        }
+
+        node = rotateLeftIfNeeded(node);
+        node = rotateRightIfNeeded(node);
+        changeColorsIfNeeded(node);
+
+        return node;
     }
 
     public String getPreOrder() {
-        // klucz1:wartosc1 klucz2:wartosc2 ...
-
-        return null;
+        return preOrder(root);
     }
 
     public String getInOrder() {
-        // klucz1:wartosc1 klucz2:wartosc2 ...
-
-        return null;
+        return inOrder(root);
     }
 
     public String getPostOrder() {
-        // klucz1:wartosc1 klucz2:wartosc2 ...
+        return postOrder(root);
+    }
 
-        return null;
+    private String preOrder(Node<K, V> node) {
+        if(node == null) {
+            return "";
+        }
+
+        String result = node.getKey().toString() + ":";
+        result += node.getValue().toString() + " ";
+
+        result += preOrder(node.getLeft());
+        result += preOrder(node.getRight());
+
+        return result;
+    }
+
+    private String inOrder(Node<K, V> node) {
+        if(node == null) {
+            return "";
+        }
+
+        String result = "";
+
+        result += inOrder(node.getLeft());
+
+        result += node.getKey().toString() + ":";
+        result += node.getValue().toString() + " ";
+        
+        result += inOrder(node.getRight());
+
+        return result;
+    }
+
+    private String postOrder(Node<K, V> node) {
+        if(node == null) {
+            return "";
+        }
+
+        String result = "";
+
+        result += postOrder(node.getLeft());
+        result += postOrder(node.getRight());
+
+        result += node.getKey().toString() + ":";
+        result += node.getValue().toString() + " ";
+    
+        return result;
     }
 }
