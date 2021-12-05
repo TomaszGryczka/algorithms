@@ -1,5 +1,6 @@
 package pl.edu.pw.ee;
 
+import static pl.edu.pw.ee.Color.BLACK;
 import static pl.edu.pw.ee.Color.RED;
 
 public class Node<K extends Comparable<K>, V> {
@@ -17,6 +18,10 @@ public class Node<K extends Comparable<K>, V> {
 
     public boolean isRed() {
         return RED.equals(color);
+    }
+
+    public boolean isBlack() {
+        return BLACK.equals(color);
     }
 
     public K getKey() {
