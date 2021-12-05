@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Field;
+import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -284,7 +285,7 @@ public class RedBlackTreeTest {
         String actual = rbt.getPreOrder();
 
         // then
-        String expected = "H:H D:D B:B A:A C:C F:F E:E G:G L:L J:J I:I K:K M:M ";
+        String expected = "H:H D:D B:B A:A C:C F:F E:E G:G L:L J:J I:I K:K M:M";
 
         assertEquals(expected, actual);
     }
@@ -302,9 +303,9 @@ public class RedBlackTreeTest {
         String actualPostOrder = rbt.getPostOrder();
 
         // then
-        String expectedPreOrder = "A:A ";
-        String expectedInOrder = "A:A ";
-        String expectedPostOrder = "A:A ";
+        String expectedPreOrder = "A:A";
+        String expectedInOrder = "A:A";
+        String expectedPostOrder = "A:A";
 
         assertEquals(expectedPreOrder, actualPreOrder);
         assertEquals(expectedInOrder, actualInOrder);
@@ -324,7 +325,7 @@ public class RedBlackTreeTest {
         String actual = rbt.getInOrder();
 
         // then
-        String expected = "A:A B:B C:C D:D E:E F:F G:G H:H I:I J:J K:K L:L M:M ";
+        String expected = "A:A B:B C:C D:D E:E F:F G:G H:H I:I J:J K:K L:L M:M";
 
         assertEquals(expected, actual);
     }
@@ -342,7 +343,7 @@ public class RedBlackTreeTest {
         String actual = rbt.getPostOrder();
 
         // then
-        String expected = "A:A C:C B:B E:E G:G F:F D:D I:I K:K J:J M:M L:L H:H ";
+        String expected = "A:A C:C B:B E:E G:G F:F D:D I:I K:K J:J M:M L:L H:H";
 
         assertEquals(expected, actual);
     }
@@ -386,7 +387,7 @@ public class RedBlackTreeTest {
     }
 
     @Test
-    public void should_RemoveMaxElems_When_RBTHasThreeNodes() {
+    public void should_RemoveElems_When_RBTHasThreeNodes() {
         // given
         RedBlackTree<String, Integer> redBlackTree = new RedBlackTree<>();
 
@@ -421,7 +422,7 @@ public class RedBlackTreeTest {
     }
 
     @Test
-    public void should_PutGetAndDeleteAllValues_WhenDataHasSortedKeys() {
+    public void should_PutGetAndDeleteAllValues_When_DataHasSortedKeys() {
         // given
         String[] data = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M" };
 
@@ -433,8 +434,6 @@ public class RedBlackTreeTest {
         String[] results = new String[data.length];
         String[] nulls = new String[data.length];
 
-        String[] expectedNulls = new String[data.length];
-
         for (int i = data.length - 1; i >= 0; i--) {
             results[i] = rbt.get(data[i]);
             rbt.deleteMax();
@@ -442,12 +441,14 @@ public class RedBlackTreeTest {
         }
 
         // then
+        String[] expectedNulls = new String[data.length];
+
         assertArrayEquals(data, results);
         assertArrayEquals(expectedNulls, nulls);
     }
 
     @Test
-    public void should_PutGetAndDeleteAllValues_WhenDataHasKeysInReverseOrder() {
+    public void should_PutGetAndDeleteAllValues_When_DataHasKeysInReverseOrder() {
         // given
         String[] data = { "M", "L", "K", "J", "I", "H", "G", "F", "E", "D", "C", "B", "A" };
 
@@ -459,8 +460,6 @@ public class RedBlackTreeTest {
         String[] results = new String[data.length];
         String[] nulls = new String[data.length];
 
-        String[] expectedNulls = new String[data.length];
-
         for (int i = 0; i < data.length; i++) {
             results[i] = rbt.get(data[i]);
             rbt.deleteMax();
@@ -468,18 +467,37 @@ public class RedBlackTreeTest {
         }
 
         // then
+        String[] expectedNulls = new String[data.length];
+
         assertArrayEquals(data, results);
         assertArrayEquals(expectedNulls, nulls);
     }
 
     @Test
-    public void should_() {
+    public void should_DeleteAllValues_When_DataIsRandom() {
         // given
+        RedBlackTree<Integer, Integer> intRbt = new RedBlackTree<>();
+
+        Random rand = new Random(123);
+        Integer[] data = new Integer[10000];
+
+        for (int i = 0; i < 10000; i++) {
+            data[i] = rand.nextInt();
+            intRbt.put(data[i], data[i]);
+        }
 
         // when
+        Integer[] nulls = new Integer[data.length];
+
+        for (int i = 10000 - 1; i >= 0; i--) {
+            intRbt.deleteMax();
+            nulls[i] = intRbt.get(i);
+        }
 
         // then
+        Integer[] expectedNulls = new Integer[data.length];
 
+        assertArrayEquals(expectedNulls, nulls);
     }
 
     private Node<String, String> getRoot(RedBlackTree<String, String> rbt) {
