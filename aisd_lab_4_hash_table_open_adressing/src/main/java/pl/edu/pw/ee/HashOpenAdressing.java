@@ -221,7 +221,7 @@ public abstract class HashOpenAdressing<T extends Comparable<T>> implements Hash
 
                 if (infLoopCheckIter == -1) {
                     hashElems = prevHash;
-                    
+
                     doubleResize();
 
                     return;
