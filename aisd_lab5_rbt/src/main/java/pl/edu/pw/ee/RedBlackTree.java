@@ -193,13 +193,13 @@ public class RedBlackTree<K extends Comparable<K>, V> {
         }
         
         if(node.getRight() == null) {
-            return null;
+            return node.getLeft();
         }
 
         if(!node.getRight().isRed() && node.getRight().getLeft() != null && !node.getLeft().isRed()) {
             changeColors(node);
 
-            if(node.getLeft() != null && node.getLeft().getLeft().isRed()) {
+            if(node.getLeft() != null &&  node.getLeft().getLeft() != null &&node.getLeft().getLeft().isRed()) {
                 node = rotateRight(node);
                 changeColors(node);
             }
@@ -208,7 +208,7 @@ public class RedBlackTree<K extends Comparable<K>, V> {
         if(node.getRight() != null) {
             node.setRight(delete(node.getRight()));
         }
-
+        
         node = rotateLeftIfNeeded(node);
         node = rotateRightIfNeeded(node);
         changeColorsIfNeeded(node);
@@ -217,18 +217,18 @@ public class RedBlackTree<K extends Comparable<K>, V> {
     }
 
     public String getPreOrder() {
-        return preOrder(root);
+        return getPreOrder(root);
     }
 
     public String getInOrder() {
-        return inOrder(root);
+        return getInOrder(root);
     }
 
     public String getPostOrder() {
-        return postOrder(root);
+        return getPostOrder(root);
     }
 
-    private String preOrder(Node<K, V> node) {
+    private String getPreOrder(Node<K, V> node) {
         if(node == null) {
             return "";
         }
@@ -236,38 +236,38 @@ public class RedBlackTree<K extends Comparable<K>, V> {
         String result = node.getKey().toString() + ":";
         result += node.getValue().toString() + " ";
 
-        result += preOrder(node.getLeft());
-        result += preOrder(node.getRight());
+        result += getPreOrder(node.getLeft());
+        result += getPreOrder(node.getRight());
 
         return result;
     }
 
-    private String inOrder(Node<K, V> node) {
+    private String getInOrder(Node<K, V> node) {
         if(node == null) {
             return "";
         }
 
         String result = "";
 
-        result += inOrder(node.getLeft());
+        result += getInOrder(node.getLeft());
 
         result += node.getKey().toString() + ":";
         result += node.getValue().toString() + " ";
         
-        result += inOrder(node.getRight());
+        result += getInOrder(node.getRight());
 
         return result;
     }
 
-    private String postOrder(Node<K, V> node) {
+    private String getPostOrder(Node<K, V> node) {
         if(node == null) {
             return "";
         }
 
         String result = "";
 
-        result += postOrder(node.getLeft());
-        result += postOrder(node.getRight());
+        result += getPostOrder(node.getLeft());
+        result += getPostOrder(node.getRight());
 
         result += node.getKey().toString() + ":";
         result += node.getValue().toString() + " ";

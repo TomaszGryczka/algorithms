@@ -1,5 +1,6 @@
 package pl.edu.pw.ee;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -43,7 +44,7 @@ public class RedBlackTreeTest {
     }
 
     @Test
-    public void should_ReturnValue_When_RBTHasOneElem() {
+    public void should_ReturnValue_When_RBTHasOneNode() {
         // given
         String key = "A";
         String value = "A";
@@ -60,7 +61,7 @@ public class RedBlackTreeTest {
     }
 
     @Test
-    public void should_ReturnValue_When_RootHasOnlyOneChild() {
+    public void should_ReturnValue_When_RBTHasTwoNodes() {
         // given
         String rootKeyVal = "B";
         String childKeyVal = "A";
@@ -73,6 +74,25 @@ public class RedBlackTreeTest {
 
         // then
         String expected = "A";
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void should_ReturnValue_When_RBTHasThreeNodes() {
+        // given
+        String firstKeyVal = "B";
+        String secondKeyVal = "A";
+        String thirdKeyVal = "C";
+
+        rbt.put(firstKeyVal, firstKeyVal);
+        rbt.put(secondKeyVal, secondKeyVal);
+        rbt.put(thirdKeyVal, thirdKeyVal);
+
+        // when
+        String actual = rbt.get(thirdKeyVal);
+
+        // then
+        String expected = "C";
         assertEquals(expected, actual);
     }
 
@@ -126,7 +146,7 @@ public class RedBlackTreeTest {
         // then
         assert false;
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void should_ThrowException_When_TryingToPutNullValue() {
         // given
@@ -176,18 +196,6 @@ public class RedBlackTreeTest {
         String expected = "something not good";
         assertEquals(expected, actual);
     }
-
-    @Test
-    public void should_() {
-        // given
-
-        // when
-
-        // then
-
-    }
-
-    
 
     @Test
     public void should_RotateLeft_When_RBTHasRedRightLink() {
@@ -246,10 +254,11 @@ public class RedBlackTreeTest {
 
         assertTrue(node.getLeft().isBlack());
         assertTrue(node.getRight().isBlack());
+        assertTrue(node.isBlack());
     }
 
     @Test
-    public void should_ReturnEmptyString_When_TryingToPrintXOrder() {
+    public void should_ReturnEmptyString_When_TryingToPrintOrdersFromEmptyRBT() {
         // when
         String actualPreOrder = rbt.getPreOrder();
         String actualInOrder = rbt.getInOrder();
@@ -278,6 +287,28 @@ public class RedBlackTreeTest {
         String expected = "H:H D:D B:B A:A C:C F:F E:E G:G L:L J:J I:I K:K M:M ";
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void should_ReturnOrderResult_When_RBTHasOneElem() {
+        // given
+        String keyVal = "A";
+
+        rbt.put(keyVal, keyVal);
+
+        // when
+        String actualPreOrder = rbt.getPreOrder();
+        String actualInOrder = rbt.getInOrder();
+        String actualPostOrder = rbt.getPostOrder();
+
+        // then
+        String expectedPreOrder = "A:A ";
+        String expectedInOrder = "A:A ";
+        String expectedPostOrder = "A:A ";
+
+        assertEquals(expectedPreOrder, actualPreOrder);
+        assertEquals(expectedInOrder, actualInOrder);
+        assertEquals(expectedPostOrder, actualPostOrder);
     }
 
     @Test
@@ -335,7 +366,7 @@ public class RedBlackTreeTest {
     }
 
     @Test
-    public void should_DeleteMaxValue_When_RootHasOnlyOneLessChild() {
+    public void should_DeleteMaxValue_When_RBTHasTwoNodes() {
         // given
         String keyVal1 = "A";
         String keyVal2 = "B";
@@ -352,7 +383,93 @@ public class RedBlackTreeTest {
         String expected = "A";
 
         assertEquals(expected, actual);
+    }
 
+    @Test
+    public void should_RemoveMaxElems_When_RBTHasThreeNodes() {
+        // given
+        RedBlackTree<String, Integer> redBlackTree = new RedBlackTree<>();
+
+        String[] keys = { "A", "B", "C" };
+        Integer[] vals = { 1, 2, 3 };
+
+        for (int i = 0; i < keys.length; i++) {
+            redBlackTree.put(keys[i], vals[i]);
+        }
+
+        // when
+        Integer actualVal3 = redBlackTree.get(keys[2]);
+        redBlackTree.deleteMax();
+        Integer val3AfterDelete = redBlackTree.get(keys[2]);
+
+        Integer actualVal2 = redBlackTree.get(keys[1]);
+        redBlackTree.deleteMax();
+        Integer val2AfterDelete = redBlackTree.get(keys[1]);
+
+        Integer actualVal1 = redBlackTree.get(keys[0]);
+        redBlackTree.deleteMax();
+        Integer val1AfterDelete = redBlackTree.get(keys[0]);
+
+        // then
+        assertEquals(vals[2], actualVal3);
+        assertEquals(vals[1], actualVal2);
+        assertEquals(vals[0], actualVal1);
+
+        assertEquals(null, val1AfterDelete);
+        assertEquals(null, val2AfterDelete);
+        assertEquals(null, val3AfterDelete);
+    }
+
+    @Test
+    public void should_PutGetAndDeleteAllValues_WhenDataHasSortedKeys() {
+        // given
+        String[] data = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M" };
+
+        for (int i = 0; i < data.length; i++) {
+            rbt.put(data[i], data[i]);
+        }
+
+        // when
+        String[] results = new String[data.length];
+        String[] nulls = new String[data.length];
+
+        String[] expectedNulls = new String[data.length];
+
+        for (int i = data.length - 1; i >= 0; i--) {
+            results[i] = rbt.get(data[i]);
+            rbt.deleteMax();
+            nulls[i] = rbt.get(data[i]);
+        }
+
+        // then
+        assertArrayEquals(data, results);
+        assertArrayEquals(expectedNulls, nulls);
+    }
+
+    @Test
+    public void should_PutGetAndDeleteAllValues_WhenDataHasKeysInReverseOrder() {
+        // given
+        String[] data = { "M", "L", "K", "J", "I", "H", "G", "F", "E", "D", "C", "B", "A" };
+
+        for (int i = 0; i < data.length; i++) {
+            rbt.put(data[i], data[i]);
+        }
+
+        // when
+        String[] results = new String[data.length];
+        String[] nulls = new String[data.length];
+
+        String[] expectedNulls = new String[data.length];
+
+        for (int i = 0; i < data.length; i++) {
+            results[i] = rbt.get(data[i]);
+            rbt.deleteMax();
+            nulls[i] = rbt.get(data[i]);
+        }
+
+        // then
+        assertArrayEquals(data, results);
+        assertArrayEquals(expectedNulls, nulls);
     }
 
     @Test

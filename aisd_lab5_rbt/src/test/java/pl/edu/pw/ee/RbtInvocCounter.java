@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore("Skipped because it takes too much time")
+@Ignore("Skipped because it takes too much time.")
 public class RbtInvocCounter {
     private URL wordListSrc;
     private BufferedReader bufferedReader;
@@ -71,8 +71,8 @@ public class RbtInvocCounter {
             }
 
             bufferedWriter.close();
-        } catch (Exception e) {
-            System.out.println("doing nothin");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
