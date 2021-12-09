@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -46,6 +47,8 @@ public class Huffman {
     }
 
     public int huffman(String pathToRootDir, boolean compress) {
+        validateRootDirectory(pathToRootDir);
+
         this.pathToRootDir = pathToRootDir;
 
         if (compress == true) {
@@ -57,21 +60,17 @@ public class Huffman {
 
             getCodes();
 
-            encode();
+            return encode();
         } else {
             listOfNodes.clear();
 
             readTreeConfig();
 
-            buildTree();
-
-            decode();
+            return decode();
         }
-
-        return 0;
     }
 
-    private void encode() {
+    private int encode() {
         String encodedText = "";
 
         char[] charsToEncode = text.toCharArray();
@@ -88,15 +87,18 @@ public class Huffman {
         }
 
         writeToFile(pathToRootDir + encodedTextFileName, encodedText);
+
+        return encodedText.length();
     }
 
     private void readPlainTextFile() {
         validateInputFileName(plainTextFileName);
 
-        try (FileReader fileReader = new FileReader(pathToRootDir + plainTextFileName);
+        try (FileReader fileReader = new FileReader(pathToRootDir + plainTextFileName, Charset.forName("UTF-8"));
                 BufferedReader reader = new BufferedReader(fileReader);) {
 
             int character;
+            text = "";
 
             while ((character = reader.read()) != -1) {
                 text += (char) character;
@@ -106,6 +108,10 @@ public class Huffman {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        if(listOfNodes.size() == 0) {
+            throw new IllegalArgumentException("File is empty!");
         }
     }
 
@@ -163,7 +169,7 @@ public class Huffman {
     private void readTreeConfig() {
         validateInputFileName(treeConfigFileName);
 
-        try (FileReader fileReader = new FileReader(pathToRootDir + treeConfigFileName);
+        try (FileReader fileReader = new FileReader(pathToRootDir + treeConfigFileName, Charset.forName("UTF-8"));
                 BufferedReader reader = new BufferedReader(fileReader);) {
 
             int character;
@@ -199,12 +205,14 @@ public class Huffman {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        buildTree();
     }
 
-    private void decode() {
+    private int decode() {
         validateInputFileName(encodedTextFileName);
 
-        try (FileReader fileReader = new FileReader(pathToRootDir + encodedTextFileName);
+        try (FileReader fileReader = new FileReader(pathToRootDir + encodedTextFileName, Charset.forName("UTF-8"));
                 BufferedReader reader = new BufferedReader(fileReader);) {
 
             int character;
@@ -218,11 +226,16 @@ public class Huffman {
             }
 
             nextNode(it, character);
-
-            writeToFile(decodedTextFileName, text);
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        writeToFile(decodedTextFileName, text);
+
+       
+
+        return text.length();
     }
 
     private Node nextNode(Node node, int character) {
@@ -232,9 +245,18 @@ public class Huffman {
             return node.getRight();
         } else {
             text += node.getCharacter();
+
+            if(node.getCharacter() == null) {
+                System.out.println("TAK");
+            }
+
             node = root;
 
-            return character != -1 ? nextNode(node, character) : node;
+            if(character != -1) {
+                return nextNode(node, character);
+            } else {
+                return node;
+            }
         }
     }
 
@@ -261,7 +283,7 @@ public class Huffman {
     private void writeToFile(String fileName, String textToWrite) {
         createNewFile(pathToRootDir + fileName);
 
-        try (FileWriter fileWriter = new FileWriter(pathToRootDir + fileName);
+        try (FileWriter fileWriter = new FileWriter(pathToRootDir + fileName, Charset.forName("UTF-8"));
                 BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);) {
 
             bufferedWriter.write(textToWrite);
@@ -287,8 +309,16 @@ public class Huffman {
     private void validateInputFileName(String fileName) {
         File file = new File(pathToRootDir + fileName);
         
-        if(!file.exists()) {
-            throw new IllegalArgumentException("File data.txt does not exist!");
+        if(!file.exists() || !file.isFile()) {
+            throw new IllegalArgumentException("File " + fileName + " does not exist!");
+        }
+    }
+
+    private void validateRootDirectory(String pathToRootDir) {
+        File file = new File(pathToRootDir);
+
+        if(!file.exists() || !file.isDirectory()) {
+            throw new IllegalArgumentException("Incorrect root directory!");
         }
     }
 
@@ -323,13 +353,21 @@ public class Huffman {
         }
     }
 
+    private void printListOfCodes() {
+        for(int i = 0; i < listOfCodes.size(); i++) {
+            System.out.println(listOfCodes.get(i).getCharacter() + "->" + listOfCodes.get(i).getBitCode());
+        }
+    }
+
     public static void main(String[] args) {
 
         Huffman huf = new Huffman();
 
-        huf.huffman("./", true);
+        System.out.println(huf.huffman("./", true));
 
-        huf.huffman("./", false);
+        //huf.printListOfCodes();
+
+        System.out.println(huf.huffman("./", false));
     }
 
 }
