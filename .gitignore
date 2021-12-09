@@ -6,3 +6,6 @@ target/
 
 #do not ignore itself
 !/.gitignore
+
+#ignore .txt files
+*.txt
