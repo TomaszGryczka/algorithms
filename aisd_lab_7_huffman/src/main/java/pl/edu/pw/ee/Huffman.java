@@ -2,7 +2,6 @@ package pl.edu.pw.ee;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,19 +12,22 @@ import java.util.List;
 
 public class Huffman {
 
+    private int encodedTextLength;
+
     private Node root;
 
     private List<Node> listOfNodes;
     private List<Code> listOfCodes;
 
     private String pathToRootDir;
-
     private final String plainTextFileName = "data.txt";
     private final String encodedTextFileName = "encoded.txt";
     private final String treeConfigFileName = "treeConfigFile.txt";
     private final String decodedTextFileName = "decoded.txt";
 
     private String text;
+
+    private String treeConfig;
 
     private class NodeComparator implements Comparator<Node> {
 
@@ -47,20 +49,24 @@ public class Huffman {
     }
 
     public int huffman(String pathToRootDir, boolean compress) {
-        validateRootDirectory(pathToRootDir);
+        ReadWriteUtils.validateRootDirectory(pathToRootDir);
 
         this.pathToRootDir = pathToRootDir;
 
         if (compress == true) {
             readPlainTextFile();
 
-            writeTreeConfigFile();
+            createTreeConfig();
 
             buildTree();
 
             getCodes();
 
-            return encode();
+            int numOfBits = encode();
+
+            writeToFile(pathToRootDir + treeConfigFileName, encodedTextLength + "\n" + treeConfig);
+
+            return numOfBits;
         } else {
             listOfNodes.clear();
 
@@ -86,13 +92,15 @@ public class Huffman {
             }
         }
 
-        writeToFile(pathToRootDir + encodedTextFileName, encodedText);
+        ReadWriteUtils.writeBinaryFile(pathToRootDir + encodedTextFileName, encodedText);
+
+        this.encodedTextLength = encodedText.length();
 
         return encodedText.length();
     }
 
     private void readPlainTextFile() {
-        validateInputFileName(plainTextFileName);
+        ReadWriteUtils.validateInputFile(pathToRootDir + plainTextFileName);
 
         try (FileReader fileReader = new FileReader(pathToRootDir + plainTextFileName, Charset.forName("UTF-8"));
                 BufferedReader reader = new BufferedReader(fileReader);) {
@@ -110,21 +118,18 @@ public class Huffman {
             e.printStackTrace();
         }
 
-        if(listOfNodes.size() == 0) {
+        if (listOfNodes.size() == 0) {
             throw new IllegalArgumentException("File is empty!");
         }
     }
 
-    private void writeTreeConfigFile() {
-        createNewFile(treeConfigFileName);
+    private void createTreeConfig() {
 
-        String result = "";
+        treeConfig = "";
 
         for (int i = 0; i < listOfNodes.size(); i++) {
-            result += listOfNodes.get(i).toString() + " ";
+            treeConfig += listOfNodes.get(i).toString() + " ";
         }
-
-        writeToFile(treeConfigFileName, result);
     }
 
     private void buildTree() {
@@ -167,21 +172,38 @@ public class Huffman {
     }
 
     private void readTreeConfig() {
-        validateInputFileName(treeConfigFileName);
+        ReadWriteUtils.validateInputFile(pathToRootDir + treeConfigFileName);
 
         try (FileReader fileReader = new FileReader(pathToRootDir + treeConfigFileName, Charset.forName("UTF-8"));
                 BufferedReader reader = new BufferedReader(fileReader);) {
 
             int character;
+            int lengthOfEncodedText;
+
+            try {
+                if ((lengthOfEncodedText = Integer.parseInt(reader.readLine())) != -1) {
+                    encodedTextLength = lengthOfEncodedText;
+                }
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException(treeConfigFileName + " is broken!");
+            }
+
             int freq;
 
             List<Character> freqChars = new ArrayList<>();
 
             while ((character = reader.read()) != -1) {
+                if (reader.read() != ' ') {
+                    throw new IllegalArgumentException("Tree config file is broken!");
+                }
+
                 while ((freq = reader.read()) != -1) {
                     if ((char) freq >= '0' && (char) freq <= '9') {
                         freqChars.add((char) freq);
                     } else {
+                        if (freq != ' ') {
+                            throw new IllegalArgumentException("Tree config file is broken!");
+                        }
                         break;
                     }
                 }
@@ -210,30 +232,28 @@ public class Huffman {
     }
 
     private int decode() {
-        validateInputFileName(encodedTextFileName);
 
-        try (FileReader fileReader = new FileReader(pathToRootDir + encodedTextFileName, Charset.forName("UTF-8"));
-                BufferedReader reader = new BufferedReader(fileReader);) {
+        String binaryFileText = ReadWriteUtils.readBinaryFile(pathToRootDir + encodedTextFileName);
 
-            int character;
+        if (encodedTextLength == 0 && root.getLeft() == null && root.getRight() == null) {
+            writeToFile(decodedTextFileName, "" + root.getCharacter());
 
-            text = "";
-
-            Node it = root;
-
-            while ((character = reader.read()) != -1) {
-                it = nextNode(it, character);
-            }
-
-            nextNode(it, character);
-            
-        } catch (IOException e) {
-            e.printStackTrace();
+            return 1;
         }
 
-        writeToFile(decodedTextFileName, text);
+        String encodedText = binaryFileText.substring(0, encodedTextLength);
 
-       
+        text = "";
+
+        Node iter = root;
+
+        for (int i = 0; i < encodedTextLength; i++) {
+            iter = nextNode(iter, encodedText.charAt(i));
+        }
+
+        nextNode(iter, encodedText.charAt(encodedTextLength - 1));
+
+        writeToFile(decodedTextFileName, text);
 
         return text.length();
     }
@@ -246,13 +266,9 @@ public class Huffman {
         } else {
             text += node.getCharacter();
 
-            if(node.getCharacter() == null) {
-                System.out.println("TAK");
-            }
-
             node = root;
 
-            if(character != -1) {
+            if (character != -1) {
                 return nextNode(node, character);
             } else {
                 return node;
@@ -261,7 +277,17 @@ public class Huffman {
     }
 
     private void addToNodes(char character, int numOfChars) {
-        if (listOfNodes.contains(new Node(null, null, 1, character))) {
+
+        boolean contains = false;
+
+        for(int i = 0; i < listOfNodes.size(); i++) {
+            if(listOfNodes.get(i).equals(new Node(null, null, 1, character))) {
+                contains = true;
+                break;
+            }
+        }
+        
+        if (contains) {
             int id = 0;
 
             Node leafToFind = new Node(null, null, 1, character);
@@ -281,7 +307,7 @@ public class Huffman {
     }
 
     private void writeToFile(String fileName, String textToWrite) {
-        createNewFile(pathToRootDir + fileName);
+        ReadWriteUtils.createNewFile(pathToRootDir + fileName);
 
         try (FileWriter fileWriter = new FileWriter(pathToRootDir + fileName, Charset.forName("UTF-8"));
                 BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);) {
@@ -293,81 +319,4 @@ public class Huffman {
             e.printStackTrace();
         }
     }
-
-    private void createNewFile(String fileName) {
-        File file = new File(pathToRootDir + fileName);
-
-        if(!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void validateInputFileName(String fileName) {
-        File file = new File(pathToRootDir + fileName);
-        
-        if(!file.exists() || !file.isFile()) {
-            throw new IllegalArgumentException("File " + fileName + " does not exist!");
-        }
-    }
-
-    private void validateRootDirectory(String pathToRootDir) {
-        File file = new File(pathToRootDir);
-
-        if(!file.exists() || !file.isDirectory()) {
-            throw new IllegalArgumentException("Incorrect root directory!");
-        }
-    }
-
-    private void printListOfNodes() {
-        for (int i = 0; i < listOfNodes.size(); i++) {
-            if (listOfNodes.get(i).getCharacter() == '\n') {
-                System.out.println("\\n" + ":" + listOfNodes.get(i).getFreq());
-            } else if (listOfNodes.get(i).getCharacter() == '\r') {
-                System.out.println("\\r" + ":" + listOfNodes.get(i).getFreq());
-            } else {
-                System.out.println(listOfNodes.get(i));
-            }
-        }
-    }
-
-    private void getPreOrder(String subWord, Node node) {
-
-        if (node.getCharacter() != null) {
-            System.out.println(node.toString(subWord));
-        }
-
-        if (node.getLeft() != null) {
-            String leftSubWord = subWord + "0";
-
-            getPreOrder(leftSubWord, node.getLeft());
-        }
-
-        if (node.getRight() != null) {
-            String rightSubWord = subWord + "1";
-
-            getPreOrder(rightSubWord, node.getRight());
-        }
-    }
-
-    private void printListOfCodes() {
-        for(int i = 0; i < listOfCodes.size(); i++) {
-            System.out.println(listOfCodes.get(i).getCharacter() + "->" + listOfCodes.get(i).getBitCode());
-        }
-    }
-
-    public static void main(String[] args) {
-
-        Huffman huf = new Huffman();
-
-        System.out.println(huf.huffman("./", true));
-
-        //huf.printListOfCodes();
-
-        System.out.println(huf.huffman("./", false));
-    }
-
 }

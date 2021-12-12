@@ -42,7 +42,7 @@ public class Node implements Comparable<Node> {
     public boolean equals(Object o) {
         if(o == null) {
             return false;
-        } else if(((Node)o).character == character) {
+        } else if(((Node)o).character.equals(character)) {
             return true;
         } else {
             return false;
@@ -51,7 +51,7 @@ public class Node implements Comparable<Node> {
 
     @Override
     public String toString() {
-        String result = character + Integer.toString(freq);
+        String result = character + " " + Integer.toString(freq);
 
         return result;
     }
