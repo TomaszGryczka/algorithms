@@ -5,9 +5,12 @@ public class Field implements Comparable<Field> {
 
     private Arrow arrow;
 
+    private boolean isPath;
+
     public Field(int fieldValue, Arrow arrow) {
         this.fieldValue = fieldValue;
         this.arrow = arrow;
+        isPath = false;
     }
 
     @Override
@@ -58,5 +61,13 @@ public class Field implements Comparable<Field> {
 
     public Arrow getArrow() {
         return arrow;
+    }
+
+    public boolean getIsPath() {
+        return isPath;
+    }
+
+    public void setIsPathTrue() {
+        isPath = true;
     }
 }
