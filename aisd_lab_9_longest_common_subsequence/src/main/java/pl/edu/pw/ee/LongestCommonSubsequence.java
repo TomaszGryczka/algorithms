@@ -12,6 +12,8 @@ public class LongestCommonSubsequence {
     private Matrix fieldMatrix;
 
     public LongestCommonSubsequence(String firstStr, String secondStr) {
+        validateStrings(firstStr, secondStr);
+
         this.firstStr = firstStr;
         this.secondStr = secondStr;
 
@@ -30,9 +32,10 @@ public class LongestCommonSubsequence {
     }
 
     public void display() {
-        final int maxNumOfChars = String.valueOf(fieldMatrix.getField(firstStrLength - 1, secondStrLength - 1).getFieldValue()).length();
+        final int maxVal = fieldMatrix.getField(firstStrLength - 1, secondStrLength - 1).getFieldValue();
+        final int maxNumOfChars = String.valueOf(maxVal).length() + 1;
 
-        final String empty = StringUtils.emptyString(maxNumOfChars + 1);
+        final String empty = StringUtils.emptyString(maxNumOfChars);
 
         String firstLine = " ";
         String secondLine = "0";
@@ -40,13 +43,12 @@ public class LongestCommonSubsequence {
         Field currentField;
 
         for(int j = 0; j < secondStrLength; j++) {
-            currentField = fieldMatrix.getField(0, j);
-            secondLine += StringUtils.leftPad(" " + currentField.getFieldValue(), maxNumOfChars + 1);
+            secondLine += " 0";
         }
 
         System.out.println(secondLine);
 
-        for(int i = 1; i < firstStrLength; i++) {
+        for(int i = 0; i < firstStrLength; i++) {
             firstLine = " ";
             secondLine = "0";
 
@@ -55,18 +57,18 @@ public class LongestCommonSubsequence {
 
                 if(currentField.getIsPath()) {
                     if(currentField.getArrow() == UPPERLEFT) {
-                        firstLine += StringUtils.rightPad("\\", maxNumOfChars + 1);
-                        secondLine += StringUtils.leftPad(" " + currentField.getFieldValue(), maxNumOfChars + 1);
+                        firstLine += StringUtils.rightPad("\\", maxNumOfChars);
+                        secondLine += StringUtils.leftPad(" " + currentField.getFieldValue(), maxNumOfChars);
                     } else if (currentField.getArrow() == UPPER) {
-                        firstLine += StringUtils.leftPad(" ^", maxNumOfChars + 1);
-                        secondLine += StringUtils.leftPad(" " + currentField.getFieldValue(), maxNumOfChars + 1);
+                        firstLine += StringUtils.leftPad(" ^", maxNumOfChars);
+                        secondLine += StringUtils.leftPad(" " + currentField.getFieldValue(), maxNumOfChars);
                     } else {
                         firstLine += empty;
-                        secondLine += StringUtils.leftPad("<" + currentField.getFieldValue(), maxNumOfChars + 1);
+                        secondLine += StringUtils.leftPad("<" + currentField.getFieldValue(), maxNumOfChars);
                     }
                 } else {
                     firstLine += empty;
-                    secondLine += StringUtils.leftPad(" " + currentField.getFieldValue(), maxNumOfChars + 1);
+                    secondLine += StringUtils.leftPad(" " + currentField.getFieldValue(), maxNumOfChars);
                 }
                 
             }
@@ -167,16 +169,31 @@ public class LongestCommonSubsequence {
         }
     }
 
+    public void validateStrings(String firstStr, String secondStr) {
+        if(firstStr == null || secondStr == null) {
+            throw new IllegalArgumentException("Strings cannot be null!");
+        }
+        
+        if(firstStr.length() == 0 || secondStr.length() == 0) {
+            throw new IllegalArgumentException("Strings length has to be greater than 0!");
+        }
+    }
+
     public static void main(String[] args) {
         LongestCommonSubsequence lcs = new LongestCommonSubsequence("dynamicprogrammingdynamicprogramming", "commonsubsequencecommonsubsequence");
         LongestCommonSubsequence lcs2 = new LongestCommonSubsequence("dynamicprogramming", "commonsubsequence");
+        LongestCommonSubsequence lcs3 = new LongestCommonSubsequence("d", "a");
+
 
         System.out.println(lcs.findLCS());
         System.out.println(lcs2.findLCS());
+        System.out.println(lcs3.findLCS());
 
         lcs.display();
         System.out.println();
         lcs2.display();
+        System.out.println();
+        lcs3.display();
     }
 
 }
