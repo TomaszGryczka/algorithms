@@ -13,11 +13,11 @@ public class LongestCommonSubsequence {
 
     private Matrix fieldMatrix;
 
-    public LongestCommonSubsequence(String firstStr, String secondStr) {
-        StringUtils.validateStrings(firstStr, secondStr);
+    public LongestCommonSubsequence(String topStr, String leftStr) {
+        StringUtils.validateStrings(topStr, leftStr);
 
-        this.firstStr = firstStr;
-        this.secondStr = secondStr;
+        this.firstStr = leftStr;
+        this.secondStr = topStr;
 
         firstStrLength = firstStr.length();
         secondStrLength = secondStr.length();

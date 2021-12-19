@@ -149,8 +149,8 @@ public class LongestCommonSubsequenceTest {
     @Test
     public void should_displayMatrix_When_StringsDoNotHaveCommonSubsequence() {
         // given
-        String firstStr = "b";
-        String secondStr = "a";
+        String firstStr = "a";
+        String secondStr = "b";
 
         LongestCommonSubsequence lcs = new LongestCommonSubsequence(firstStr, secondStr);
 
@@ -173,8 +173,8 @@ public class LongestCommonSubsequenceTest {
     @Test
     public void should_displayMatrixCorrectly_When_StringsHaveSpecialCharacters() {
         // given
-        String firstStr = "\n";
-        String secondStr = "\r";
+        String firstStr = "\r";
+        String secondStr = "\n";
 
         LongestCommonSubsequence lcs = new LongestCommonSubsequence(firstStr, secondStr);
 
@@ -197,8 +197,8 @@ public class LongestCommonSubsequenceTest {
     @Test
     public void should_findLCSAndDisplayMatrix_When_StringsHaveOnlyNumericalData() {
         // given
-        String firstStr = "1";
-        String secondStr = "12";
+        String firstStr = "12";
+        String secondStr = "1";
 
         LongestCommonSubsequence lcs = new LongestCommonSubsequence(firstStr, secondStr);
 
