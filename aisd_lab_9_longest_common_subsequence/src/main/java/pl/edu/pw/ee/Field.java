@@ -8,6 +8,14 @@ public class Field implements Comparable<Field> {
     private boolean isPath;
 
     public Field(int fieldValue, Arrow arrow) {
+        if (fieldValue < 0) {
+            throw new IllegalArgumentException("Field value cannot be lower than 0!");
+        }
+
+        if (arrow == null) {
+            throw new IllegalArgumentException("Arrow cannot be null!");
+        }
+
         this.fieldValue = fieldValue;
         this.arrow = arrow;
         isPath = false;
@@ -15,7 +23,9 @@ public class Field implements Comparable<Field> {
 
     @Override
     public int compareTo(Field otherField) {
-        if (fieldValue < otherField.fieldValue) {
+        if (otherField == null) {
+            throw new IllegalArgumentException("Field cannot be null!");
+        } else if (fieldValue < otherField.fieldValue) {
             return -1;
         } else if (fieldValue > otherField.fieldValue) {
             return 1;

@@ -3,7 +3,6 @@ package pl.edu.pw.ee;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.PrintStream;
 
 import org.junit.Test;
@@ -127,9 +126,7 @@ public class LongestCommonSubsequenceTest {
         System.setOut(oldOut);
 
         // then
-        String expected = "0 0\r\n"
-                + " \\ \r\n"
-                + "0 1\r\n";
+        String expected = "     a \r\n   0 0\r\n    \\\r\n a 0 1\r\n";
         assertEquals(expected, actual);
     }
 
@@ -142,7 +139,6 @@ public class LongestCommonSubsequenceTest {
         LongestCommonSubsequence lcs = new LongestCommonSubsequence(firstStr, secondStr);
 
         // when
-
         String actual = lcs.findLCS();
 
         // then
@@ -170,9 +166,59 @@ public class LongestCommonSubsequenceTest {
         System.setOut(oldOut);
 
         // then
-        String expected = "0 0\r\n"
-                + " ^ \r\n"
-                + "0 0\r\n";
+        String expected = "     a \r\n   0 0\r\n     ^\r\n b 0 0\r\n";
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void should_displayMatrixCorrectly_When_StringsHaveSpecialCharacters() {
+        // given
+        String firstStr = "\n";
+        String secondStr = "\r";
+
+        LongestCommonSubsequence lcs = new LongestCommonSubsequence(firstStr, secondStr);
+
+        // when
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(output));
+
+        lcs.findLCS();
+        lcs.display();
+
+        String actual = output.toString();
+
+        System.setOut(oldOut);
+
+        // then
+        String expected = "     \\r\r\n   0 0\r\n     ^\r\n\\n 0 0\r\n";
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void should_findLCSAndDisplayMatrix_When_StringsHaveOnlyNumericalData() {
+        // given
+        String firstStr = "1";
+        String secondStr = "12";
+
+        LongestCommonSubsequence lcs = new LongestCommonSubsequence(firstStr, secondStr);
+
+        // when
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(output));
+
+        String actualPath = lcs.findLCS();
+
+        lcs.display();
+
+        String actualDisplay = output.toString();
+
+        System.setOut(oldOut);
+
+        // then
+        String expectedPath = "1";
+        String expectedDisplay = "     1 2 \r\n   0 0 0\r\n    \\  \r\n 1 0 1<1\r\n";
+
+        assertEquals(expectedDisplay, actualDisplay);
+        assertEquals(expectedPath, actualPath);
     }
 }

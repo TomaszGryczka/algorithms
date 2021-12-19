@@ -1,6 +1,8 @@
 package pl.edu.pw.ee;
 
-import static pl.edu.pw.ee.Arrow.*;
+import static pl.edu.pw.ee.Arrow.LEFT;
+import static pl.edu.pw.ee.Arrow.UPPER;
+import static pl.edu.pw.ee.Arrow.UPPERLEFT;
 
 public class LongestCommonSubsequence {
     private final String firstStr;
@@ -12,7 +14,7 @@ public class LongestCommonSubsequence {
     private Matrix fieldMatrix;
 
     public LongestCommonSubsequence(String firstStr, String secondStr) {
-        validateStrings(firstStr, secondStr);
+        StringUtils.validateStrings(firstStr, secondStr);
 
         this.firstStr = firstStr;
         this.secondStr = secondStr;
@@ -36,31 +38,36 @@ public class LongestCommonSubsequence {
         final int maxNumOfChars = String.valueOf(maxVal).length() + 1;
 
         final String empty = StringUtils.emptyString(maxNumOfChars);
+        final String gap = StringUtils.emptyString(maxNumOfChars - 1);
 
-        String firstLine = " ";
-        String secondLine = "0";
+        String firstLine = "    " + gap;
+        String secondLine = "   0";
 
         Field currentField;
 
-        for(int j = 0; j < secondStrLength; j++) {
-            secondLine += " 0";
+        for (int j = 0; j < secondStrLength; j++) {
+            String character = StringUtils.getSpecialCharacter(secondStr.charAt(j));
+            firstLine += character.charAt(0) != secondStr.charAt(j) ? character + gap.substring(0, gap.length() - 1)
+                    : character + gap;
+            secondLine += gap + "0";
         }
 
+        System.out.println(firstLine);
         System.out.println(secondLine);
 
-        for(int i = 0; i < firstStrLength; i++) {
-            firstLine = " ";
-            secondLine = "0";
+        for (int i = 0; i < firstStrLength; i++) {
+            firstLine = "  ";
+            secondLine = StringUtils.leftPad(StringUtils.getSpecialCharacter(firstStr.charAt(i)), 2) + " 0";
 
-            for(int j = 0; j < secondStrLength; j++) {
+            for (int j = 0; j < secondStrLength; j++) {
                 currentField = fieldMatrix.getField(i, j);
 
-                if(currentField.getIsPath()) {
-                    if(currentField.getArrow() == UPPERLEFT) {
-                        firstLine += StringUtils.rightPad("\\", maxNumOfChars);
+                if (currentField.getIsPath()) {
+                    if (currentField.getArrow() == UPPERLEFT) {
+                        firstLine += StringUtils.rightPad(gap + " \\", maxNumOfChars);
                         secondLine += StringUtils.leftPad(" " + currentField.getFieldValue(), maxNumOfChars);
                     } else if (currentField.getArrow() == UPPER) {
-                        firstLine += StringUtils.leftPad(" ^", maxNumOfChars);
+                        firstLine += StringUtils.leftPad(gap + "  ^", maxNumOfChars);
                         secondLine += StringUtils.leftPad(" " + currentField.getFieldValue(), maxNumOfChars);
                     } else {
                         firstLine += empty;
@@ -70,7 +77,7 @@ public class LongestCommonSubsequence {
                     firstLine += empty;
                     secondLine += StringUtils.leftPad(" " + currentField.getFieldValue(), maxNumOfChars);
                 }
-                
+
             }
             System.out.println(firstLine);
             System.out.println(secondLine);
@@ -168,32 +175,4 @@ public class LongestCommonSubsequence {
             }
         }
     }
-
-    public void validateStrings(String firstStr, String secondStr) {
-        if(firstStr == null || secondStr == null) {
-            throw new IllegalArgumentException("Strings cannot be null!");
-        }
-        
-        if(firstStr.length() == 0 || secondStr.length() == 0) {
-            throw new IllegalArgumentException("Strings length has to be greater than 0!");
-        }
-    }
-
-    public static void main(String[] args) {
-        LongestCommonSubsequence lcs = new LongestCommonSubsequence("dynamicprogrammingdynamicprogramming", "commonsubsequencecommonsubsequence");
-        LongestCommonSubsequence lcs2 = new LongestCommonSubsequence("dynamicprogramming", "commonsubsequence");
-        LongestCommonSubsequence lcs3 = new LongestCommonSubsequence("d", "a");
-
-
-        System.out.println(lcs.findLCS());
-        System.out.println(lcs2.findLCS());
-        System.out.println(lcs3.findLCS());
-
-        lcs.display();
-        System.out.println();
-        lcs2.display();
-        System.out.println();
-        lcs3.display();
-    }
-
 }
