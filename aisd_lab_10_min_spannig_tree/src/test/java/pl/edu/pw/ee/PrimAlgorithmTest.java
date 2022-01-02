@@ -46,6 +46,18 @@ public class PrimAlgorithmTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void should_ThrowException_When_FileDoesNotExist() {
+        // given
+        String pathToFile = "idonotexist";
+
+        // when
+        mst.findMST(pathToFile);
+
+        // then
+        assert false;
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void should_ThrowException_When_FileHasIncorrectLine() {
         // given
         File tempFile = null;
@@ -139,7 +151,7 @@ public class PrimAlgorithmTest {
         }
 
         // when
-        mst.findMST(tempFile.getAbsolutePath());
+        System.out.println(mst.findMST(tempFile.getAbsolutePath()));
 
         // then
         assert false;

@@ -72,10 +72,6 @@ public class Vertex {
         return result;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public boolean isIncluded() {
         return isIncluded;
     }
