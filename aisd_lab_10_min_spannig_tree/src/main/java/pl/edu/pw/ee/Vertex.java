@@ -4,37 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Vertex {
-    private String name;
+    private final String name;
 
-    private List<Connection> connections;
-
-    private List<Vertex> verts;
     private List<Edge> edges;
 
     private boolean isIncluded;
 
     public Vertex(String name) {
-        verts = new ArrayList<>();
         edges = new ArrayList<>();
-
-        connections = new ArrayList<>();
 
         this.name = name;
 
-        isIncluded = false;
+        this.isIncluded = false;
     }
 
-    public void addEdge(Vertex vertex, Edge edge) {
-        if(verts.contains(vertex) && edges.contains(edge)) {
+    public void addEdge(Edge edge) {
+        if(edges.contains(edge)) {
             throw new IllegalArgumentException("Edge has already been added!");
         }
-        
-        verts.add(vertex);
+
         edges.add(edge);
-
-        Connection con = new Connection(name, vertex.name, edge.getWeight());
-
-        connections.add(con);
     }
 
     /*
@@ -43,7 +32,7 @@ public class Vertex {
 
     */
 
-    public void print() {
+    /*public void print() {
         System.out.println(name);
 
         for(int i = 0; i < verts.size(); i++) {
@@ -51,7 +40,7 @@ public class Vertex {
         }
 
         System.out.println();
-    }
+    }*/
 
     @Override
     public boolean equals(Object obj) {
@@ -67,7 +56,7 @@ public class Vertex {
             return false;
         }
 
-        if (name.compareTo(((Vertex) obj).name) != 0) {
+        if (!name.equals(((Vertex) obj).name)) {
             return false;
         }
 
@@ -95,7 +84,7 @@ public class Vertex {
         this.isIncluded = isIncluded;
     }
 
-    public List<Connection> getConnections() {
-        return connections;
+    public List<Edge> getEdges() {
+        return edges;
     }
 }

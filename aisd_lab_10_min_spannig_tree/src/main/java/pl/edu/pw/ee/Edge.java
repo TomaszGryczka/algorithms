@@ -1,73 +1,30 @@
 package pl.edu.pw.ee;
 
-public class Edge implements Comparable<Edge> {
+public class Edge {
+    private final String firstVer;
+    private final String secondVer;
     private final int weight;
-    private boolean isIncluded;
 
-    public Edge(int weight) {
+    public Edge(String firstVer, String secondVer, int weight) {
+        this.firstVer = firstVer;
+        this.secondVer = secondVer;
         this.weight = weight;
-        isIncluded = false;
     }
 
     @Override
-    public int compareTo(Edge otherEdge) {
-        if (otherEdge == null) {
-            throw new IllegalArgumentException("Edge cannot be null!");
-        } else if (weight < otherEdge.weight) {
-            return -1;
-        } else if (weight > otherEdge.weight) {
-            return 1;
-        } else {
-            return 0;
-        }
+    public String toString() {
+        return firstVer + "_" + weight + "_" + secondVer;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-
-        if (this == obj) {
-            return true;
-        }
-
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-
-        if (this.weight != ((Edge) obj).weight) {
-            return false;
-        }
-
-        return true;
+    public String getFirstVer() {
+        return firstVer;
     }
 
-    @Override
-    public int hashCode() {
-        int primeNum = 31;
-        int result = 1;
-
-        result = primeNum * result + weight;
-
-        return result;
+    public String getSecondVer() {
+        return secondVer;
     }
-
-    /*
-
-    DO USUNIECIA
-
-    */
 
     public int getWeight() {
         return weight;
-    }
-
-    public void setIncluded(boolean isIncluded) {
-        this.isIncluded = isIncluded;
-    }
-
-    public boolean isIncluded() {
-        return isIncluded;
     }
 }
