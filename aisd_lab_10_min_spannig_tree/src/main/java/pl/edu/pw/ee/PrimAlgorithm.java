@@ -74,7 +74,7 @@ public class PrimAlgorithm implements MinSpanningTree {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -114,27 +114,34 @@ public class PrimAlgorithm implements MinSpanningTree {
         final int weight = Integer.parseInt(data[2]);
 
         final Edge edge = new Edge(data[0], data[1], weight);
+        final Edge invertedEdge = new Edge(data[1], data[0], weight);
 
         int id;
 
         if (graph.contains(firstVertex) && graph.contains(secondVertex)) {
             id = findVertexId(firstVertex);
             graph.get(id).addEdge(edge);
+
+            id = findVertexId(secondVertex);
+            graph.get(id).addEdge(invertedEdge);
         } else if (!graph.contains(firstVertex) && !graph.contains(secondVertex)) {
             graph.add(firstVertex);
             graph.get(graph.size() - 1).addEdge(edge);
 
             graph.add(secondVertex);
+            graph.get(graph.size() - 1).addEdge(invertedEdge);
         } else if (!graph.contains(firstVertex) && graph.contains(secondVertex)) {
-            id = findVertexId(secondVertex);
-            graph.get(id).addEdge(edge);
-
             graph.add(firstVertex);
+            graph.get(graph.size() - 1).addEdge(edge);
+
+            id = findVertexId(secondVertex);
+            graph.get(id).addEdge(invertedEdge);
         } else {
             id = findVertexId(firstVertex);
             graph.get(id).addEdge(edge);
 
             graph.add(secondVertex);
+            graph.get(graph.size() - 1).addEdge(invertedEdge);
         }
     }
 
@@ -192,13 +199,5 @@ public class PrimAlgorithm implements MinSpanningTree {
         if (graph.size() == 0) {
             throw new IllegalArgumentException("Incorrect data file!");
         }
-    }
-
-    public static void main(String[] args) {
-        PrimAlgorithm pa = new PrimAlgorithm();
-
-        // System.out.println(pa.findMST("./small_data.txt"));
-
-        System.out.println(pa.findMST("./small_data.txt"));
     }
 }

@@ -284,4 +284,24 @@ public class PrimAlgorithmTest {
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void should_FindMST_When_FileHasInvertedVeritces() {
+        // given
+        try {
+            dataFile = dataFolder.newFile("./dataFile.txt");
+
+            FileUtils.writeStringToFile(dataFile, "v b 1\na c 2\nv d 3\na e 4\ne b 1\nc e 4");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // when
+        String actual = mst.findMST(dataFile.getAbsolutePath());
+
+        // then
+        String expected = "v_1_b|b_1_e|v_3_d|e_4_a|a_2_c";
+
+        assertEquals(expected, actual);
+    }
 }

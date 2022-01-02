@@ -44,18 +44,18 @@ public class PriorityQueueListImplementation implements PriorityQueue {
 
     @Override
     public void put(Edge edge) {
-        if(edge == null) {
+        if (edge == null) {
             throw new IllegalArgumentException("Cannot put null edge!");
         }
 
-        if(root == null || cmp.compare(edge, root.edge) > 0) {
+        if (root == null || cmp.compare(edge, root.edge) > 0) {
             root = new Node(edge, root);
         } else {
             Node node = new Node(edge);
 
             Node iter = root;
 
-            while(iter.next != null && cmp.compare(iter.next.edge, edge) >= 0) {
+            while (iter.next != null && cmp.compare(iter.next.edge, edge) >= 0) {
                 iter = iter.next;
             }
 
@@ -67,13 +67,13 @@ public class PriorityQueueListImplementation implements PriorityQueue {
 
     @Override
     public Edge pop() {
-        if(root == null) {
+        if (root == null) {
             return null;
         }
 
         Edge result = root.edge;
         root = root.next;
-        
+
         return result;
-    } 
+    }
 }

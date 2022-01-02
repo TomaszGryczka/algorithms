@@ -6,10 +6,10 @@ public class Edge {
     private final int weight;
 
     public Edge(String firstVer, String secondVer, int weight) {
-        if(firstVer == null || secondVer == null) {
+        if (firstVer == null || secondVer == null) {
             throw new IllegalArgumentException("Names of vertices cannot be null!");
         }
-        
+
         this.firstVer = firstVer;
         this.secondVer = secondVer;
         this.weight = weight;

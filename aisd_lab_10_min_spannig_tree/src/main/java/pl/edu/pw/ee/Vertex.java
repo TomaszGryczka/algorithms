@@ -11,7 +11,7 @@ public class Vertex {
     private boolean isIncluded;
 
     public Vertex(String name) {
-        if(name == null) {
+        if (name == null) {
             throw new IllegalArgumentException("Name cannot be null!");
         }
 
@@ -23,7 +23,7 @@ public class Vertex {
     }
 
     public void addEdge(Edge edge) {
-        if(edge == null) {
+        if (edge == null) {
             throw new IllegalArgumentException("Edge cannot be null!");
         }
 
