@@ -11,6 +11,10 @@ public class Vertex {
     private boolean isIncluded;
 
     public Vertex(String name) {
+        if(name == null) {
+            throw new IllegalArgumentException("Name cannot be null!");
+        }
+
         edges = new ArrayList<>();
 
         this.name = name;
@@ -19,28 +23,12 @@ public class Vertex {
     }
 
     public void addEdge(Edge edge) {
-        if(edges.contains(edge)) {
-            throw new IllegalArgumentException("Edge has already been added!");
+        if(edge == null) {
+            throw new IllegalArgumentException("Edge cannot be null!");
         }
 
         edges.add(edge);
     }
-
-    /*
-
-    DO USUNIECIA
-
-    */
-
-    /*public void print() {
-        System.out.println(name);
-
-        for(int i = 0; i < verts.size(); i++) {
-            System.out.println(edges.get(i).getWeight() + " " + verts.get(i).name);
-        }
-
-        System.out.println();
-    }*/
 
     @Override
     public boolean equals(Object obj) {

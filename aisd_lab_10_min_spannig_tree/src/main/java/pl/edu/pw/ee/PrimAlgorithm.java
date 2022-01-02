@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.math.NumberUtils;
-
 import pl.edu.pw.ee.services.MinSpanningTree;
 import pl.edu.pw.ee.services.PriorityQueue;
 
@@ -76,6 +74,7 @@ public class PrimAlgorithm implements MinSpanningTree {
                 return true;
             }
         }
+        
         return false;
     }
 
@@ -109,31 +108,31 @@ public class PrimAlgorithm implements MinSpanningTree {
         validateVertices(data[0], data[1]);
         validateWeight(data[2]);
 
-        Vertex firstVertex = new Vertex(data[0]);
-        Vertex secondVertex = new Vertex(data[1]);
+        final Vertex firstVertex = new Vertex(data[0]);
+        final Vertex secondVertex = new Vertex(data[1]);
 
-        int weight = Integer.parseInt(data[2]);
+        final int weight = Integer.parseInt(data[2]);
 
-        Edge connection = new Edge(data[0], data[1], weight);
+        final Edge edge = new Edge(data[0], data[1], weight);
 
         int id;
 
         if (graph.contains(firstVertex) && graph.contains(secondVertex)) {
             id = findVertexId(firstVertex);
-            graph.get(id).addEdge(connection);
+            graph.get(id).addEdge(edge);
         } else if (!graph.contains(firstVertex) && !graph.contains(secondVertex)) {
             graph.add(firstVertex);
-            graph.get(graph.size() - 1).addEdge(connection);
+            graph.get(graph.size() - 1).addEdge(edge);
 
             graph.add(secondVertex);
         } else if (!graph.contains(firstVertex) && graph.contains(secondVertex)) {
             id = findVertexId(secondVertex);
-            graph.get(id).addEdge(connection);
+            graph.get(id).addEdge(edge);
 
             graph.add(firstVertex);
         } else {
             id = findVertexId(firstVertex);
-            graph.get(id).addEdge(connection);
+            graph.get(id).addEdge(edge);
 
             graph.add(secondVertex);
         }
@@ -150,7 +149,7 @@ public class PrimAlgorithm implements MinSpanningTree {
     }
 
     private void validateWeight(String str) {
-        if (NumberUtils.isCreatable(str)) {
+        if (str.matches("-?\\d+")) {
             if (!(Integer.parseInt(str) >= 0)) {
                 throw new IllegalArgumentException("Weight has to be greater or equal to 0!");
             }

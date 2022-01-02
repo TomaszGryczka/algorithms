@@ -14,20 +14,6 @@ public class PriorityQueueListImplementation implements PriorityQueue {
         this.cmp = new WeightComparator();
     }
 
-    /*
-    DO USUNIĘCIA
-    */
-
-    public void print() {
-        Node it = root;
-
-        while(it != null) {
-            System.out.print(it.edge.toString() + " ");
-            it = it.next;
-        }
-        System.out.println();
-    }
-
     private class Node {
         Edge edge;
 
@@ -44,7 +30,6 @@ public class PriorityQueueListImplementation implements PriorityQueue {
     }
 
     private class WeightComparator implements Comparator<Edge> {
-
         @Override
         public int compare(Edge o1, Edge o2) {
             if (o1.getWeight() < o2.getWeight()) {
@@ -57,10 +42,12 @@ public class PriorityQueueListImplementation implements PriorityQueue {
         }
     }
 
-    
-
     @Override
     public void put(Edge edge) {
+        if(edge == null) {
+            throw new IllegalArgumentException("Cannot put null edge!");
+        }
+
         if(root == null || cmp.compare(edge, root.edge) > 0) {
             root = new Node(edge, root);
         } else {
