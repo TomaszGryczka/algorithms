@@ -65,6 +65,16 @@ public class PriorityQueueListImplementation implements PriorityQueue {
 
     }
 
+    public void print() {
+        Node iter = root;
+
+        while(iter != null) {
+            System.out.print(iter.edge.toString() + " ");
+            iter = iter.next;
+        }
+        System.out.println();
+    }
+
     @Override
     public Edge pop() {
         if (root == null) {
