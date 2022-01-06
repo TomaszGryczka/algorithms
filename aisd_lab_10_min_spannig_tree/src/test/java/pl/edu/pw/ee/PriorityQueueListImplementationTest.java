@@ -55,7 +55,6 @@ public class PriorityQueueListImplementationTest {
         Edge expected = null;
 
         assertEquals(expected, actual);
-        ;
     }
 
     @Test

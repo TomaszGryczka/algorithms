@@ -100,13 +100,13 @@ public class KruskalAlgorithm implements MinSpanningTree {
         pQueue.put(edgeToPut);
     }
 
-    private void validateWeight(String str) {
-        if (str.matches("-?\\d+")) {
-            if (!(Integer.parseInt(str) >= 0)) {
-                throw new IllegalArgumentException("Weight has to be greater or equal to 0!");
+    private void validateWeight(String weight) {
+        if (weight.matches("-?\\d+")) {
+            if (!(Integer.parseInt(weight) >= 0)) {
+                throw new IllegalArgumentException("Weight: \"" + weight + "\" is not greater or equal to 0!");
             }
         } else {
-            throw new IllegalArgumentException("Weight is not a number!");
+            throw new IllegalArgumentException("Weight: \"" + weight + "\" is not a integer number!");
         }
 
     }
@@ -133,7 +133,7 @@ public class KruskalAlgorithm implements MinSpanningTree {
     }
 
     private void validateInputFile(String pathToFile) {
-        if(pathToFile == null) {
+        if (pathToFile == null) {
             throw new IllegalArgumentException("Path to file cannot be null!");
         }
 

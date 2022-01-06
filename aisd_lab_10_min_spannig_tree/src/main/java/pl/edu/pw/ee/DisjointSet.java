@@ -9,8 +9,12 @@ public class DisjointSet {
     public DisjointSet() {
         forest = new ArrayList<>();
     }
-
+    
     public boolean isDisconnected() {
+        if(forest.size() < 2) {
+            throw new IllegalArgumentException("Illegal size of forest!");
+        }
+
         Node root = findRoot(forest.get(0));
 
         for(int i = 1; i < forest.size(); i++) {
@@ -23,6 +27,10 @@ public class DisjointSet {
     }
 
     public void addNode(String nodeName) {
+        if(nodeName == null) {
+            throw new IllegalArgumentException("Node name cannot be null!");
+        }
+        
         Node newNode = new Node(nodeName);
 
         if (!forest.contains(newNode)) {
@@ -33,7 +41,9 @@ public class DisjointSet {
     }
 
     public boolean union(String firstNodeName, String secondNodeName) {
-        //zabezpieczyć
+        if(firstNodeName == null || secondNodeName == null) {
+            throw new IllegalArgumentException("Name of nodes cannot be null!");
+        }
 
         Node firstNode = findNode(firstNodeName);
         Node secondNode = findNode(secondNodeName);
@@ -64,7 +74,7 @@ public class DisjointSet {
             }
         }
 
-        throw new IllegalArgumentException("Node");
+        throw new IllegalArgumentException("Cannot find node of given name.");
     }
 
     private Node findRoot(Node nodeToFind) {
