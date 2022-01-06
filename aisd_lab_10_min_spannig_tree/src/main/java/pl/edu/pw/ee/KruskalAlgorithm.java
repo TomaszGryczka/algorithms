@@ -4,37 +4,47 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
+import pl.edu.pw.ee.services.MinSpanningTree;
 import pl.edu.pw.ee.services.PriorityQueue;
 
-public class KruskalAlgorithm {
-    private List<Vertex> graph;
+public class KruskalAlgorithm implements MinSpanningTree {
 
-    private PriorityQueue pQueue;
+    private final PriorityQueue pQueue;
 
     public KruskalAlgorithm() {
-        graph = new ArrayList<>();
         pQueue = new PriorityQueueListImplementation();
     }
 
     public String findMST(String pathToFile) {
         readFile(pathToFile);
-        validateGraphSize();
 
         String result = "";
 
-        for(int i = 0; i < graph.size(); i++) {
-            List<Edge> edges = graph.get(i).getEdges();
-            for(Edge edge : edges) {
-                pQueue.put(edge);
+        Edge poppedEdge;
+
+        final DisjointSet disjointSet = new DisjointSet();
+
+        while ((poppedEdge = pQueue.pop()) != null) {
+            final String firstVer = poppedEdge.getFirstVer();
+            final String secondVer = poppedEdge.getSecondVer();
+            final int edgeWeight = poppedEdge.getWeight();
+
+            disjointSet.addNode(firstVer);
+            disjointSet.addNode(secondVer);
+
+            boolean edgeAdded = disjointSet.union(firstVer, secondVer);
+
+            if (edgeAdded) {
+                result += firstVer + "_" + edgeWeight + "_" + secondVer + "|";
             }
         }
 
-        pQueue.print();
+        if (disjointSet.isDisconnected()) {
+            throw new IllegalArgumentException("Graph is disconnected!");
+        }
 
-
+        result = result.substring(0, result.length() - 1);
 
         return result;
     }
@@ -49,7 +59,7 @@ public class KruskalAlgorithm {
 
             while ((line = bufferedReader.readLine()) != null) {
                 if (!line.contains(" ")) {
-                    throw new IllegalArgumentException("Incorrect data file!");
+                    throw new IllegalArgumentException("Incorrect data file in line: \"" + line + "\"");
                 }
 
                 String[] result = line.split(" ");
@@ -57,78 +67,37 @@ public class KruskalAlgorithm {
                 if (result.length == 3) {
                     addEdge(result);
                 } else {
-                    throw new IllegalArgumentException("Incorrect data file!");
+                    throw new IllegalArgumentException("Incorrect data file in line: \"" + line + "\"");
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        if (pQueue.isEmpty()) {
+            throw new IllegalArgumentException("File: " + pathToFile + " cannot be empty!");
+        }
     }
 
     private void addEdge(String[] data) {
-        validateVertices(data[0], data[1]);
+        String firstVer = data[0];
+        String secondVer = data[1];
+
         validateWeight(data[2]);
-
-        int numCounter = 0;
-
-        final Vertex firstVertex = new Vertex(data[0]);
-        final Vertex secondVertex = new Vertex(data[1]);
 
         final int weight = Integer.parseInt(data[2]);
 
-        final Edge edge = new Edge(data[0], data[1], weight);
-        final Edge invertedEdge = new Edge(data[1], data[0], weight);
+        validateVertices(firstVer, secondVer);
 
-        int id;
-
-        if (graph.contains(firstVertex) && graph.contains(secondVertex)) {
-            id = findVertexId(firstVertex);
-            graph.get(id).addEdge(edge);
-
-            id = findVertexId(secondVertex);
-            graph.get(id).addEdge(invertedEdge);
-        } else if (!graph.contains(firstVertex) && !graph.contains(secondVertex)) {
-            graph.add(firstVertex);
-            edge.setTreeNum(numCounter);
-            graph.get(graph.size() - 1).addEdge(edge);
-
-            
-
-            graph.add(secondVertex);
-            invertedEdge.setTreeInvertedNum(numCounter);
-            graph.get(graph.size() - 1).addEdge(invertedEdge);
-
-            numCounter += 2;
-        } else if (!graph.contains(firstVertex) && graph.contains(secondVertex)) {
-            graph.add(firstVertex);
-            edge.setTreeNum(numCounter);
-            graph.get(graph.size() - 1).addEdge(edge);
-
-            id = findVertexId(secondVertex);
-            invertedEdge.setTreeInvertedNum(numCounter);
-            graph.get(id).addEdge(invertedEdge);
-
-            numCounter += 2;
-        } else {
-            id = findVertexId(firstVertex);
-            edge.setTreeNum(numCounter);
-            graph.get(id).addEdge(edge);
-
-            graph.add(secondVertex);
-            invertedEdge.setTreeInvertedNum(numCounter);
-            graph.get(graph.size() - 1).addEdge(invertedEdge);
-            numCounter += 2;
-        }
-    }
-
-    private int findVertexId(Vertex vertex) {
-        for (int i = 0; i < graph.size(); i++) {
-            if (graph.get(i).equals(vertex)) {
-                return i;
-            }
+        if (firstVer.compareTo(secondVer) > 0) {
+            String tmpVer = firstVer;
+            firstVer = secondVer;
+            secondVer = tmpVer;
         }
 
-        throw new IllegalArgumentException("Grpah does not have vertex of this name!");
+        Edge edgeToPut = new Edge(firstVer, secondVer, weight);
+
+        pQueue.put(edgeToPut);
     }
 
     private void validateWeight(String str) {
@@ -164,24 +133,22 @@ public class KruskalAlgorithm {
     }
 
     private void validateInputFile(String pathToFile) {
+        if(pathToFile == null) {
+            throw new IllegalArgumentException("Path to file cannot be null!");
+        }
+
         File file = new File(pathToFile);
 
         if (!file.exists() || !file.isFile()) {
-            throw new IllegalArgumentException("File " + pathToFile + " does not exist!");
-        }
-    }
-
-    private void validateGraphSize() {
-        if (graph.size() == 0) {
-            throw new IllegalArgumentException("Incorrect data file!");
+            throw new IllegalArgumentException("File " + "\"" + pathToFile + "\"" + " does not exist!");
         }
     }
 
     public static void main(String[] args) {
-        PrimAlgorithm pa = new PrimAlgorithm();
+        KruskalAlgorithm ka = new KruskalAlgorithm();
 
         // System.out.println(pa.findMST("./small_data.txt"));
 
-        System.out.println(pa.findMST("./small_data.txt"));
+        System.out.println(ka.findMST("./small_data.txt"));
     }
 }

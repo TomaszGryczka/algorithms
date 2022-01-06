@@ -27,6 +27,48 @@ public class PriorityQueueListImplementation implements PriorityQueue {
             this.edge = edge;
             this.next = next;
         }
+
+        public boolean equals(Object obj) {
+            if(obj == null) {
+                return false;
+            }
+    
+            if(this == obj) {
+                return true;
+            }
+    
+            if(getClass() != obj.getClass()) {
+                return false;
+            }
+    
+            if(!edge.getFirstVer().equals((((Node)obj).edge.getFirstVer()))) {
+                return false;
+            }
+
+            if(!edge.getSecondVer().equals((((Node)obj).edge.getSecondVer()))) {
+                return false;
+            }
+
+            if(edge.getWeight() != (((Node)obj).edge.getWeight())) {
+                return false;
+            }
+    
+            return true;
+        }
+    
+
+        /* 
+        do poprawy 
+        */
+        public int hashCode() {
+            int result = 1;
+    
+            result += edge.getFirstVer().hashCode();
+            result += edge.getSecondVer().hashCode();
+            result += edge.getWeight();
+    
+            return result;
+        }
     }
 
     private class WeightComparator implements Comparator<Edge> {
@@ -59,20 +101,14 @@ public class PriorityQueueListImplementation implements PriorityQueue {
                 iter = iter.next;
             }
 
+            if(iter != null && iter.equals(node)) {
+                return;
+            }
+
             node.next = iter.next;
             iter.next = node;
         }
 
-    }
-
-    public void print() {
-        Node iter = root;
-
-        while(iter != null) {
-            System.out.print(iter.edge.toString() + " ");
-            iter = iter.next;
-        }
-        System.out.println();
     }
 
     @Override
@@ -85,5 +121,13 @@ public class PriorityQueueListImplementation implements PriorityQueue {
         root = root.next;
 
         return result;
+    }
+
+    public boolean isEmpty() {
+        if(root == null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

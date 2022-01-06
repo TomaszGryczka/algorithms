@@ -7,5 +7,5 @@ public interface PriorityQueue {
 
     public Edge pop();
 
-    public void print();
+    public boolean isEmpty();
 }

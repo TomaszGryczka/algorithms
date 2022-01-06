@@ -20,7 +20,7 @@ public class Edge {
 
     @Override
     public String toString() {
-        return firstVer +"(" + firstVerTreeNum + ")" + "_" + weight + "_" + secondVer +"(" + firstVerTreeNum + ")";
+        return firstVer + "_" + weight + "_" + secondVer;
     }
 
     public String getFirstVer() {
