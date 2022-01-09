@@ -143,12 +143,4 @@ public class KruskalAlgorithm implements MinSpanningTree {
             throw new IllegalArgumentException("File " + "\"" + pathToFile + "\"" + " does not exist!");
         }
     }
-
-    public static void main(String[] args) {
-        KruskalAlgorithm ka = new KruskalAlgorithm();
-
-        // System.out.println(pa.findMST("./small_data.txt"));
-
-        System.out.println(ka.findMST("./small_data.txt"));
-    }
 }

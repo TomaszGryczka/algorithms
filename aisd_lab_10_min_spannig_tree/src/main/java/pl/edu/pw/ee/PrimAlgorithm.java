@@ -188,6 +188,10 @@ public class PrimAlgorithm implements MinSpanningTree {
     }
 
     private void validateInputFile(String pathToFile) {
+        if(pathToFile == null) {
+            throw new IllegalArgumentException("Path to file cannot be null!");
+        }
+        
         File file = new File(pathToFile);
 
         if (!file.exists() || !file.isFile()) {

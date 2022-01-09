@@ -304,4 +304,16 @@ public class PrimAlgorithmTest {
 
         assertEquals(expected, actual);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_ThrowException_When_PathToFileIsNull() {
+        // given
+        String pathToFile = null;
+
+        // when
+        mst.findMST(pathToFile);
+
+        // then
+        assert false;
+    }
 }
