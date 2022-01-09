@@ -11,11 +11,9 @@ public class DisjointSet {
     }
     
     public boolean isDisconnected() {
-        if(forest.size() < 2) {
-            throw new IllegalArgumentException("Illegal size of forest!");
-        }
+        validateForestSize();
 
-        Node root = findRoot(forest.get(0));
+        final Node root = findRoot(forest.get(0));
 
         for(int i = 1; i < forest.size(); i++) {
             if(!findRoot(forest.get(i)).equals(root)) {
@@ -41,6 +39,8 @@ public class DisjointSet {
     }
 
     public boolean union(String firstNodeName, String secondNodeName) {
+        validateForestSize();
+
         if(firstNodeName == null || secondNodeName == null) {
             throw new IllegalArgumentException("Name of nodes cannot be null!");
         }
@@ -91,5 +91,11 @@ public class DisjointSet {
         }
 
         return root;
+    }
+
+    private void validateForestSize() {
+        if(forest.size() < 2) {
+            throw new IllegalArgumentException("Illegal size of forest!");
+        }
     }
 }

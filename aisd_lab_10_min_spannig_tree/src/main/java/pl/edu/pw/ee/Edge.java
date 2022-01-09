@@ -5,12 +5,11 @@ public class Edge {
     private final String secondVer;
     private final int weight;
 
-    private int firstVerTreeNum;
-    private int secondVerTreeNum;
-
     public Edge(String firstVer, String secondVer, int weight) {
         if (firstVer == null || secondVer == null) {
             throw new IllegalArgumentException("Names of vertices cannot be null!");
+        } else if(weight < 0) {
+            throw new IllegalArgumentException("Weight should be greater or equal to 0!");
         }
 
         this.firstVer = firstVer;
@@ -33,31 +32,5 @@ public class Edge {
 
     public int getWeight() {
         return weight;
-    }
-
-    public int getFirstVerTreeNum() {
-        return firstVerTreeNum;
-    }
-
-    public void setFirstVerTreeNum(int number) {
-        firstVerTreeNum = number;
-    }
-
-    public int getSecondVerTreeNum() {
-        return secondVerTreeNum;
-    }
-
-    public void setSecondVerTreeNum(int number) {
-        secondVerTreeNum = number;
-    }
-
-    public void setTreeNum(int number) {
-        firstVerTreeNum = number;
-        secondVerTreeNum = number + 1;
-    }
-
-    public void setTreeInvertedNum(int number) {
-        firstVerTreeNum = number + 1;
-        secondVerTreeNum = number;
     }
 }

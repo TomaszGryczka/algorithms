@@ -25,8 +25,8 @@ public class DisjointSetTest {
     @Test(expected = IllegalArgumentException.class)
     public void should_ThrowException_When_CheckConnectionOfForestWithOneTree() {
         // given
-        String vertex = "WOW";
-        disjointSet.addNode(vertex);
+        String node = "WOW";
+        disjointSet.addNode(node);
 
         // when
         disjointSet.isDisconnected();
@@ -38,11 +38,11 @@ public class DisjointSetTest {
     @Test
     public void should_ReturnTrue_When_GraphIsDisconnected() {
         // given
-        String vertex1 = "WOW";
-        String vertex2 = "OH";
+        String firstNode = "WOW";
+        String secondNode = "OH";
 
-        disjointSet.addNode(vertex1);
-        disjointSet.addNode(vertex2);
+        disjointSet.addNode(firstNode);
+        disjointSet.addNode(secondNode);
 
         // when
         boolean actual = disjointSet.isDisconnected();
@@ -50,19 +50,19 @@ public class DisjointSetTest {
         // then
         boolean expected = true;
 
-        assertEquals(expected, actual);;
+        assertEquals(expected, actual);
     }
 
     @Test
     public void should_ReturnFalse_When_GraphIsConnected() {
         // given
-        String vertex1 = "WOW";
-        String vertex2 = "OH";
+        String firstNode = "WOW";
+        String secondNode = "OH";
 
-        disjointSet.addNode(vertex1);
-        disjointSet.addNode(vertex2);
+        disjointSet.addNode(firstNode);
+        disjointSet.addNode(secondNode);
 
-        disjointSet.union(vertex1, vertex2);
+        disjointSet.union(firstNode, secondNode);
 
         // when
         boolean actual = disjointSet.isDisconnected();
@@ -70,7 +70,7 @@ public class DisjointSetTest {
         // then
         boolean expected = false;
 
-        assertEquals(expected, actual);;
+        assertEquals(expected, actual);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -83,5 +83,83 @@ public class DisjointSetTest {
 
         // then
         assert false;
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_ThrowException_When_UnionGraphWithoutTrees() {
+        // given
+        String firstNodeName = "aaa";
+        String secondNodeName = "beeee";
+
+        // when
+        disjointSet.union(firstNodeName, secondNodeName);
+
+        // then
+        assert false;
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_ThrowException_When_UnionNotExistingNodes() {
+        // given
+        String firstNodeName = "aaa";
+        String secondNodeName = "beeee";
+
+        String addedNode1 = "uuu";
+        String addedNode2 = "llll";
+
+        disjointSet.addNode(addedNode1);
+        disjointSet.addNode(addedNode2);
+
+        // when
+        disjointSet.union(firstNodeName, secondNodeName);
+
+        // then
+        assert false;
+    }
+
+    @Test
+    public void should_MergeNodes_When_NodesAreNotConnected() {
+        // given
+        String firstNode = "WOW";
+        String secondNode = "OH";
+
+        disjointSet.addNode(firstNode);
+        disjointSet.addNode(secondNode);
+
+        // when
+        boolean actualBeforeUnion = disjointSet.isDisconnected();
+        disjointSet.union(firstNode, secondNode);
+        boolean actualAfterUnion = disjointSet.isDisconnected();
+
+        // then
+        boolean expectedBeforeUnion = true;
+        boolean expectedAfterUnion = false;
+
+        assertEquals(expectedBeforeUnion, actualBeforeUnion);
+        assertEquals(expectedAfterUnion, actualAfterUnion);
+    }
+
+    @Test
+    public void should_LeaveNodesConnected_When_NodesAreConnected() {
+        // given
+        String firstNode = "WOW";
+        String secondNode = "OH";
+
+        disjointSet.addNode(firstNode);
+        disjointSet.addNode(secondNode);
+
+        disjointSet.union(firstNode, secondNode);
+
+        // when
+        boolean actualBeforeUnion = disjointSet.isDisconnected();
+        disjointSet.union(firstNode, secondNode);
+        boolean actualAfterUnion = disjointSet.isDisconnected();
+
+        // then
+        boolean expectedBeforeUnion = false;
+        boolean expectedAfterUnion = false;
+
+        assertEquals(expectedBeforeUnion, actualBeforeUnion);
+        assertEquals(expectedAfterUnion, actualAfterUnion);
     }
 }

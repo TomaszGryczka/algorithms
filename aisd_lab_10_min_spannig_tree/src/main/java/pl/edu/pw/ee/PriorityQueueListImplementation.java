@@ -56,12 +56,8 @@ public class PriorityQueueListImplementation implements PriorityQueue {
             return true;
         }
     
-
-        /* 
-        do poprawy 
-        */
         public int hashCode() {
-            int result = 1;
+            int result = 31;
     
             result += edge.getFirstVer().hashCode();
             result += edge.getSecondVer().hashCode();
