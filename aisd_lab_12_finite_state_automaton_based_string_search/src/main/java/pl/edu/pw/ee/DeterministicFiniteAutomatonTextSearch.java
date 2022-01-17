@@ -100,7 +100,7 @@ public class DeterministicFiniteAutomatonTextSearch implements PatternSearch {
         }
 
         if(indices.size() == 0) {
-            return null;
+            return new int[0];
         }
 
         int[] arrToRet = indices.stream().mapToInt(i -> i).toArray();

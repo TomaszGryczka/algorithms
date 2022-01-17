@@ -210,7 +210,7 @@ public class DeterministicFiniteAutomatonTextSearchTest {
     }
 
     @Test
-    public void should_ReturnNull_When_FindAllDidNotFindPatternInText() {
+    public void should_ReturnEmptyArray_When_FindAllDidNotFindPatternInText() {
         // given
         String pattern = "AAA";
         String text = "ABBA";
@@ -220,8 +220,8 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         int[] actual = dSearch.findAll(text);
 
         // then
-        int[] expected = null;
-        assertEquals(expected, actual);
+        int[] expected = new int[0];
+        assertArrayEquals(expected, actual);
     }
 
     @Test
@@ -268,5 +268,36 @@ public class DeterministicFiniteAutomatonTextSearchTest {
         int expected = 0;
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void should_ReturnCorrectVal_When_PatternIsLongerThanText() {
+        // given
+        String pattern = "OJCZE";
+        String text = "OJ";
+        dSearch = new DeterministicFiniteAutomatonTextSearch(pattern);
+
+        // when
+        int actual = dSearch.findFirst(text);
+
+        // then
+        int expected = -1;
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void should_FindAll_When_TextConsistOfPatternThatIsSingleCharacter() {
+        // given
+        String pattern = "a";
+        String text = "aaaaaaaa";
+        dSearch = new DeterministicFiniteAutomatonTextSearch(pattern);
+
+        // when
+        int[] actual = dSearch.findAll(text);
+
+        // then
+        int[] expected = {0, 1, 2, 3, 4, 5, 6, 7};
+        assertArrayEquals(expected, actual);
     }
 }
