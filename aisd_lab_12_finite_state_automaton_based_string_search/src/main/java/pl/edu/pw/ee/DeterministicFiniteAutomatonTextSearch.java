@@ -4,7 +4,6 @@ import static java.lang.Math.min;
 import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +44,9 @@ public class DeterministicFiniteAutomatonTextSearch implements PatternSearch {
 
     public DeterministicFiniteAutomatonTextSearch(String pattern) {
         validateInput(pattern);
+        if(pattern.length() == 0) {
+            throw new IllegalArgumentException("Pattern cannot be empty!");
+        }
 
         this.pattern = pattern;
         buildTransitionMatrix();
@@ -60,15 +62,14 @@ public class DeterministicFiniteAutomatonTextSearch implements PatternSearch {
         int state = 0;
 
         for (int i = 0; i < n; i++) {
-            
+
             Key key = new Key(state, text.charAt(i));
-            if(transMap.get(key) != null) {
+
+            if (transMap.get(key) != null) {
                 state = transMap.get(key);
             } else {
                 state = 0;
             }
-            
-            System.out.println(i + " " + state);
 
             if (state == acceptedState) {
                 result = i - acceptedState + 1;
@@ -83,21 +84,28 @@ public class DeterministicFiniteAutomatonTextSearch implements PatternSearch {
     public int[] findAll(String text) {
         validateInput(text);
 
-        int n = text.length() - 1;
+        int prevTextLength = text.length();
 
         List<Integer> indices = new ArrayList<>();
         int findResult = -2;
 
-        while(findResult != -1) {
-            findResult = findFirst(text);
-            indices.add(findResult); 
-            text.substring(findResult, n);
+        int j = 0;
+
+        while ((findResult = findFirst(text)) != -1) {
+            indices.add(findResult + j);
+            j += findResult + 1;
+
+            text = text.substring(findResult + 1, prevTextLength);
+            prevTextLength = text.length();
         }
 
-        //convert form arraylist to int[] 
+        if(indices.size() == 0) {
+            return null;
+        }
 
+        int[] arrToRet = indices.stream().mapToInt(i -> i).toArray();
 
-        throw new UnsupportedOperationException("Not implemented yet.");
+        return arrToRet;
     }
 
     private void validateInput(String txt) {
@@ -121,7 +129,9 @@ public class DeterministicFiniteAutomatonTextSearch implements PatternSearch {
                 while (k > 0 && !isSuffixOfPattern(k, q, sign)) {
                     k--;
                 }
-                System.out.println(String.format("sigma(%d, %c) = %d\n", q, sign, k));
+
+                // System.out.println(String.format("sigma(%d, %c) = %d\n", q, sign, k));
+
                 transMap.put(new Key(q, sign), k);
             }
         }

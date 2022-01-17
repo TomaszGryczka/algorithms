@@ -1,43 +1,272 @@
 package pl.edu.pw.ee;
 
-import org.junit.Before;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.Test;
-import org.junit.jupiter.api.io.TempDir;
 
 public class DeterministicFiniteAutomatonTextSearchTest {
-
     private DeterministicFiniteAutomatonTextSearch dSearch;
 
-    @Before
-    public void setUp() {
-        
+    @Test(expected = IllegalArgumentException.class)
+    public void should_ThrowException_When_PatternIsEmpty() {
+        // given
+        String pattern = "";
+        String text = "BAEGH";
+
+        // when
+        dSearch = new DeterministicFiniteAutomatonTextSearch(pattern);
+
+        // then
+        assert false;
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void should_ThrowException_When_PatternIsNull() {
-        //given
+        // given
         String pattern = null;
         String text = "BAEGH";
 
-        //when
+        // when
         dSearch = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int result = dSearch.findFirst(text);
 
-        //then
-        System.out.println(result);
+        // then
+        assert false;
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_ThrowException_When_TextIsNull() {
+        // given
+        String pattern = "OHO";
+        String text = null;
+
+        // when
+        dSearch = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int actual = dSearch.findFirst(text);
+
+        // then
+        assert false;
     }
 
     @Test
-    public void should_() {
-        //given
-        String pattern = null;
-        String text = "BAEGH";
+    public void should_FindFirst_When_PatternAndTextAreEqualAndHaveOneLetter() {
+        // given
+        String pattern = "O";
+        String text = "O";
 
-        //when
+        // when
         dSearch = new DeterministicFiniteAutomatonTextSearch(pattern);
-        int result = dSearch.findFirst(text);
+        int actual = dSearch.findFirst(text);
 
-        //then
-        System.out.println(result);
+        // then
+        int expected = 0;
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void should_ReturnCorrectVal_When_PatternAndTextAreNotEqualAndHaveOneLetter() {
+        // given
+        String pattern = "Q";
+        String text = "O";
+
+        // when
+        dSearch = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int actual = dSearch.findFirst(text);
+
+        // then
+        int expected = -1;
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void should_ReturnCorrectVal_When_TextIsEmpty() {
+        // given
+        String pattern = "ABA";
+        String text = "";
+
+        // when
+        dSearch = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int actual = dSearch.findFirst(text);
+
+        // then
+        int expected = -1;
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void should_ReturnFirstFind_When_TextHasMultiplePatterns() {
+        // given
+        String pattern = "ABA";
+        String text = "ERABABABA";
+
+        // when
+        dSearch = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int actual = dSearch.findFirst(text);
+
+        // then
+        int expected = 2;
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void should_ReturnFirstFind_When_TextHasPatternAtBegining() {
+        // given
+        String pattern = "ABA";
+        String text = "ABAJKJHKL";
+
+        // when
+        dSearch = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int actual = dSearch.findFirst(text);
+
+        // then
+        int expected = 0;
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void should_ReturnFirstFind_When_TextAndPatternHaveSpecialCharacters() {
+        // given
+        String newLinePattern = "\n";
+        String tabPattern = "\t";
+        String carriageReturnPattern = "\r";
+        String winNewLinePattern = "\r\n";
+
+        String text = "A\tSAJ\nBB\rMM\r\n";
+
+        // when
+        dSearch = new DeterministicFiniteAutomatonTextSearch(newLinePattern);
+        int actualNewLine = dSearch.findFirst(text);
+
+        dSearch = new DeterministicFiniteAutomatonTextSearch(tabPattern);
+        int actualTab = dSearch.findFirst(text);
+
+        dSearch = new DeterministicFiniteAutomatonTextSearch(carriageReturnPattern);
+        int actualCarriageReturn = dSearch.findFirst(text);
+
+        dSearch = new DeterministicFiniteAutomatonTextSearch(winNewLinePattern);
+        int actualWinNewLine = dSearch.findFirst(text);
+
+        // then
+        int expectedNewLine = 5;
+        int expectedTab = 1;
+        int expectedCarriageReturn = 8;
+        int expectedWinNewLine = 11;
+
+        assertEquals(expectedNewLine, actualNewLine);
+        assertEquals(expectedTab, actualTab);
+        assertEquals(expectedCarriageReturn, actualCarriageReturn);
+        assertEquals(expectedWinNewLine, actualWinNewLine);
+    }
+
+    @Test
+    public void should_ReturnFirstFind_When_TextHasPatternAtEnd() {
+        // given
+        String pattern = "ABA";
+        String text = "JKJHKLABA";
+
+        // when
+        dSearch = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int actual = dSearch.findFirst(text);
+
+        // then
+        int expected = 6;
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void should_ReturnFirstFind_When_TextHasPatternInMiddle() {
+        // given
+        String pattern = "ABA";
+        String text = "JKJABAHKL";
+
+        // when
+        dSearch = new DeterministicFiniteAutomatonTextSearch(pattern);
+        int actual = dSearch.findFirst(text);
+
+        // then
+        int expected = 3;
+
+        assertEquals(expected, actual);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_ThrowException_When_TryingToFindAllInNullText() {
+        // given
+        String pattern = "AAA";
+        String text = null;
+        dSearch = new DeterministicFiniteAutomatonTextSearch(pattern);
+
+        // when
+        int[] actual = dSearch.findAll(text);
+
+        // then
+        assert false;
+    }
+
+    @Test
+    public void should_ReturnNull_When_FindAllDidNotFindPatternInText() {
+        // given
+        String pattern = "AAA";
+        String text = "ABBA";
+        dSearch = new DeterministicFiniteAutomatonTextSearch(pattern);
+
+        // when
+        int[] actual = dSearch.findAll(text);
+
+        // then
+        int[] expected = null;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void should_FindAll_When_TextHasDisjointPatterns() {
+        // given
+        String pattern = "ABA";
+        String text = "dddABAGTHJJHABA";
+        dSearch = new DeterministicFiniteAutomatonTextSearch(pattern);
+
+        // when
+        int[] actual = dSearch.findAll(text);
+
+        // then
+        int[] expected = {3, 12};
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void should_FindAll_When_TextHasNotDisjointPatterns() {
+        // given
+        String pattern = "ABA";
+        String text = "dddABABABABAYYY";
+        dSearch = new DeterministicFiniteAutomatonTextSearch(pattern);
+
+        // when
+        int[] actual = dSearch.findAll(text);
+
+        // then
+        int[] expected = {3, 5, 7, 9};
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void should_FindFirst_When_PatternIsEqualToText() {
+        // given
+        String pattern = "OJCZE";
+        String text = "OJCZE";
+        dSearch = new DeterministicFiniteAutomatonTextSearch(pattern);
+
+        // when
+        int actual = dSearch.findFirst(text);
+
+        // then
+        int expected = 0;
+
+        assertEquals(expected, actual);
     }
 }
