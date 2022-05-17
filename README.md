@@ -19,7 +19,7 @@ The following list contains all implemented algorithms:
 ## Getting started
 
 ### Dependencies
-- openjdk version 1.8
+- openjdk version 1.8 or higher
 - either maven or IDE with built in maven plugin
 
 ### Running tests
